@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full&skin=dark"></script>
+
+
+    <title>Document</title>
+
+</head>
+<body>
+    <div id="map" style="width:100vh; height:100vh"></div>
+</body>
+
+<script type="text/javascript">
+    var map;
+
+    DG.then(function () {
+        
+        map = DG.map('map', {
+            center: [43.241025, 76.957485],
+            zoom: 13
+        });
+
+        DG.marker([43.251025, 76.957485]).addTo(map).bindPopup('Скаймейка')
+
+        myIcon = DG.icon({
+                    iconUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/YandexNavigatorLogo.svg/512px-YandexNavigatorLogo.svg.png',
+                    iconSize: [48, 48]
+                });
+                DG.marker([43.241025, 76.957485], {
+                    icon: myIcon
+                }).addTo(map).bindPopup('Центральноазиатский Технико-Экономический Колледж');
+
+        map.locate({setView: true, watch: true})
+                    .on('locationfound', function(e) {
+
+
+                        DG.marker([e.latitude, e.longitude], {
+                            icon: myIcon
+                        }).addTo(map).bindPopup('Центральноазиатский Технико-Экономический Колледж');
+                    })
+                    .on('locationerror', function(e) {
+                        DG.popup()
+                          .setLatLng(map.getCenter())
+                          .setContent('Доступ к определению местоположения отключён')
+                          .openOn(map);
+                    });
+    
+    
+        
+        
+    });
+</script>
+
+</html>
