@@ -114,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
 DEFAULT_CHARSET = 'utf-8'
-os.environ["DJANGO_SETTINGS_MODULE"] = "czn.settings"
+os.environ["DJANGO_SETTINGS_MODULE"] = "BenchesAlmaty.settings"
 os.environ["PYTHONIOENCODING"] = "UTF-8"
 
 LANGUAGE_CODE = 'ru'
