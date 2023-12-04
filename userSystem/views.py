@@ -28,7 +28,7 @@ def user_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('userSystem/index')
+                return redirect('mySite:index')
 
     else:
         form = LoginForm()
@@ -36,7 +36,7 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
-    return redirect('mySite/index')
+    return redirect('mySite:index')
 
 
 # profile system
@@ -64,7 +64,7 @@ def edit_profile(request):
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
-            return redirect('userSystem/view_profile')
+            return redirect('view_profile')
 
     else:
         form = ProfileForm(instance=profile)

@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-+n+^0pb2-l(sn+nvrf3gfi-)3e=)-ey2xi=+mj3-xvd%$(sc0r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1',]
 
 
 # Application definition
@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     # 'livereload', # pip install django-livereload-server
+
     'rosetta',
     'mySite', # app name
     'userSystem', # login system
@@ -157,3 +159,6 @@ INTERNAL_IPS = [
 ]
 
 NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
+
+
+AUTH_USER_MODEL = 'userSystem.CustomUser'
