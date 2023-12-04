@@ -1,0 +1,44 @@
+{% extends "mySite/base.html" %}
+{% load static %}
+{% load i18n %}
+{% get_current_language as language_code %}
+
+<!DOCTYPE html>
+<html lang="{{ language_code }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block extra_css %}
+        <link rel="stylesheet" href="{% static 'mySite/register.css' %}">
+    {% endblock %}
+    {% block title %}edit profile{% endblock %}
+</head>
+<body>
+    <div class="profile">
+        {% include 'mySite/base.html' %} 
+        <div class="container">
+            <div class="profile-container">
+                {% block content %}
+                    <h1>Редактирование профиля</h1>
+                    <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label for="id_bio">Биография:</label>
+                        <textarea id="id_bio" name="bio">{{ profile.bio }}</textarea>
+                        <br>
+                        <label for="id_avatar">Аватар:</label>
+                        <img src="{{ profile.avatar.url }}" alt="Аватар пользователя">
+                        <input type="file" id="id_avatar" name="avatar">
+                        <br>
+                        <input type="submit" value="Сохранить">
+                    </form>
+
+                    <a href="{% url 'mySite:view_profile' %}">Вернуться</a>
+                {% endblock %}
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

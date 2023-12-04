@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     # 'livereload', # pip install django-livereload-server
     'rosetta',
     'mySite', # app name
+    'userSystem', # login system
+    
+    'tailwind',
+    'theme'
 ]
 
 MIDDLEWARE = [
@@ -123,6 +127,7 @@ USE_TZ = True
 LANGUAGES = [
     ('ru', 'Russian'),
     ('kk', 'Kazakh'),
+    ("en", "English"),
     # Add more languages if needed
 ]
 
@@ -142,3 +147,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = '/login/'
+
+TAILWIND_APP_NAME = 'theme'
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"

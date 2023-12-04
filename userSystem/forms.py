@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import CustomUser, Profile, Advertisement
+from .models import CustomUser, Profile
 
 # login system
 class RegistrationForm(UserCreationForm):

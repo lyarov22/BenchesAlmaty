@@ -1,0 +1,69 @@
+{% load static %}
+{% load i18n %}
+{% get_current_language as language_code %}
+
+<!DOCTYPE html>
+<html lang="{{ language_code }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'reSite/header.css' %}">
+    <link rel="stylesheet" href="{% static 'reSite/universal.css' %}">
+    {% block extra_css %}{% endblock %}
+
+    <title>
+        {% block title %}{% endblock %} — {% trans 'Карта скамеек Алматы' %} 
+    </title>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav>
+                <div class="nav-left">
+                    <div class="nav-logo">
+                        <a href="{% url 'mySite:index' %}">
+                          <img class="nav__logo" src="{% static 'img/reread-fulllogo.png' %}" alt="ReRead"/>
+                        </a>    
+                    </div>
+                </div>
+                <a href="{% url 'mySite:index' %}">{% trans 'Список объявлений' %}</a>
+                <div class="nav-right">
+                    <div class="nav-langs">
+                        <a href="{% url 'set_language' %}" class="nav__lang {% if LANGUAGE_CODE == 'kk' %}active{% endif %}" onclick="event.preventDefault(); document.getElementById('language-form').language.value = 'kk'; document.getElementById('language-form').submit();">Қаз</a>
+                        <a href="{% url 'set_language' %}" class="nav__lang {% if LANGUAGE_CODE == 'ru' %}active{% endif %}" onclick="event.preventDefault(); document.getElementById('language-form').language.value = 'ru'; document.getElementById('language-form').submit();">Рус</a>
+                    </div>
+                    <div class="nav-icons">
+                        {% if user.is_authenticated %}
+                            <a href="{% url mySite:profile' %}">{% trans 'Профиль' %}</a>
+                        {% else %}
+                            <a href="{% url 'mySite:login' %}">{% trans 'Войти' %}</a>
+                            <a href="{% url 'mySite:register' %}">{% trans 'Зарегистрироваться' %}</a>
+                        {% endif %}
+
+                        <a href="{% url 'mySite:index' %}">{% trans 'Создать объявление' %}</a>
+
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div class="main">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    
+    <form id="language-form" action="{% url 'set_language' %}" method="post">
+        {% csrf_token %}
+        <select name="language" style="display: none;">
+            {% get_available_languages as LANGUAGES %}
+            {% get_language_info_list for LANGUAGES as languages %}
+            {% for language in languages %}
+                <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                    {{ language.name_local }} ({{ language.code }})
+                </option>
+            {% endfor %}
+        </select>
+    </form>
+</body>
+</html>
