@@ -12,6 +12,7 @@ class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
     avatar = models.ImageField(default='default.png', upload_to='user_avatars/', blank=True, null=True)
+    level = models.IntegerField(default=0)
 
     def __str__(self):
         return self.user.username

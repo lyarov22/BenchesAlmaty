@@ -8,47 +8,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'reSite/header.css' %}">
-    <link rel="stylesheet" href="{% static 'reSite/universal.css' %}">
-    {% block extra_css %}{% endblock %}
+    {% tailwind_css %}
 
     <title>
         {% block title %}{% endblock %} — {% trans 'Карта скамеек Алматы' %} 
     </title>
+
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <nav>
-                <div class="nav-left">
-                    <div class="nav-logo">
-                        <a href="{% url 'mySite:index' %}">
-                          <img class="nav__logo" src="{% static 'img/reread-fulllogo.png' %}" alt="ReRead"/>
-                        </a>    
-                    </div>
-                </div>
-                <a href="{% url 'mySite:index' %}">{% trans 'Список скамеек' %}</a>
-                <div class="nav-right">
-                    <div class="nav-langs">
-                        <a href="{% url 'set_language' %}" class="nav__lang {% if LANGUAGE_CODE == 'kk' %}active{% endif %}" onclick="event.preventDefault(); document.getElementById('language-form').language.value = 'kk'; document.getElementById('language-form').submit();">Қаз</a>
-                        <a href="{% url 'set_language' %}" class="nav__lang {% if LANGUAGE_CODE == 'ru' %}active{% endif %}" onclick="event.preventDefault(); document.getElementById('language-form').language.value = 'ru'; document.getElementById('language-form').submit();">Рус</a>
-                    </div>
-                    <div class="nav-icons">
-                        {% if user.is_authenticated %}
-                            <a href="{% url 'view_profile' %}">{% trans 'Профиль' %}</a>
-                            <a href="{% url 'logout' %}">{% trans 'Выйти' %}</a>
-                        {% else %}
-                            <a href="{% url 'login' %}">{% trans 'Войти' %}</a>
-                            <a href="{% url 'register' %}">{% trans 'Зарегистрироваться' %}</a>
-                        {% endif %}
+    <header class="font-sans leading-normal tracking-normal z-999">
 
-                        <a href="{% url 'mySite:index' %}">{% trans 'Создать скамейку' %}</a>
+        <nav class="bg-white flex items-center justify-between flex-wrap bg-grey-darkest p-9 fixed w-full z-10 pin-t -mt-28 ">
+            <div class="flex items-center flex-no-shrink text-white mr-6">
+                <a class="text-black no-underline hover:text-green-500 hover:no-underline flex items-center flex-no-shrink" href="#">
+                <img class="h-16" src="{% static 'img/benchIcon.png' %}" alt="ReRead"/>
+                  <span class="text-2xl pl-2"><i class="em em-grinning"></i>Карта скамеек Алматы</span>
+                </a>
+              </div>
+              
+    
+            <div class="block lg:hidden">
+                <button id="nav-toggle" class="flex items-center px-3 py-2 border rounded text-grey border-grey-dark hover:text-white hover:border-white">
+                    <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+                </button>
+            </div>
+    
+            <div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block pt-6 lg:pt-0 " id="nav-content">
 
+                <ul class="list-reset lg:flex justify-end flex-1 items-center text-xl">
+                    <a href="{% url 'set_language' %}" 
+                        class="mr-3 focus:outline-none text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal leading-3 shadow-md rounded active:bg-green-500 {% if LANGUAGE_CODE == 'ru' %}bg-green-500{% endif %}" 
+                        onclick="event.preventDefault(); document.getElementById('language-form').language.value = 'ru'; document.getElementById('language-form').submit();">
+                        Рус
+                    </a>
+                    <a href="{% url 'set_language' %}" 
+                        class="mr-5 focus:outline-none text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal leading-3 shadow-md rounded active:bg-green-500 {% if LANGUAGE_CODE == 'kk' %}bg-green-500{% endif %}" 
+                        onclick="event.preventDefault(); document.getElementById('language-form').language.value = 'kk'; document.getElementById('language-form').submit();">
+                        Қаз
+                    </a>
+
+                    <li class="mr-3">
+                        <a class="hover:text-green-500" href="{% url 'mySite:index' %}">{% trans 'Список скамеек' %}</a>
+                    </li>
+                    <li class="mr-3">
+                        <a href="{% url 'mySite:index' %}" class="inline-block text-grey-dark no-underline hover:text-green-500 hover:text-underline py-2 lg:px-4">{% trans 'Создать скамейку' %}</a>
+                    </li>
+                    
+                    {% if user.is_authenticated %}
+                        <li class="mr-3">
+                            <a href="{% url 'view_profile' %}" class="inline-block text-grey-dark no-underline hover:text-green-500 hover:text-underline py-2 lg:px-4">{% trans 'Профиль' %}</a>
+                        </li>
+                        <li class="mr-3">
+                            <a href="{% url 'logout' %}" class="inline-block text-grey-dark no-underline hover:text-green-500 hover:text-underline py-2 lg:px-4">{% trans 'Выйти' %}</a>
+                        </li> 
+                    {% else %}
+                        <li class="mr-3">
+                            <a href="{% url 'login' %}" class="inline-block text-grey-dark no-underline hover:text-green-500 hover:text-underline py-2 lg:px-4">{% trans 'Войти' %}</a>
+                        </li>
+                        <li class="mr-3">
+                            <a href="{% url 'register' %}" class="inline-block text-grey-dark no-underline hover:text-green-500 hover:text-underline py-2 lg:px-4">{% trans 'Зарегистрироваться' %}</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+
+                    <div class="">
+                        <div x-data="{ open: false }" class="relative inline-block text-left">
+                          <button @click="open = !open" class="text-xl inline-flex justify-center w-full px-4 py-2 font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-gray-100 focus:ring-blue-500">
+                            {% trans 'Профиль' %}
+                            <img class="h-7 w-7 ml-2 rounded-xl mt-0.5" src="{{ profile.avatar.url }}" alt="avatar">
+                            <svg class="h-5 w-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                          </button>
+                          <div x-show="open" @click.away="open = false" class="origin-top-left absolute left-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 px-2 py-2">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">Save</a>
+                            
+                            <a href="#" class="block px-4 py-2 text-sm text-red-500 hover:bg-red-100 rounded-md">Report</a>
+                          </div>
+                        </div>
                     </div>
-                </div>
-            </nav>
+                    
+
+            <script>
+            function selected() {
+                var targeted = event.target;
+                var clicked = targeted.parentElement;
+              
+                var child = clicked.children;
+                console.log(child);
+              
+                for (let i = 0; i < child.length; i++) {
+                  if (child[i].classList.contains("text-white")) {
+                    console.log(child[i]);
+                    child[i].classList.remove("text-white", "bg-indigo-600");
+                    child[i].classList.add(
+                      "text-gray-600",
+                      "bg-gray-50",
+                      "border",
+                      "border-white"
+                    );
+                  }
+                }
+              
+                targeted.classList.remove(
+                  "text-gray-600",
+                  "bg-gray-50",
+                  "border",
+                  "border-white"
+                );
+                targeted.classList.add("text-white", "bg-indigo-600");
+              }
+            </script>
+
+        </nav>
+    
+        <!--Container-->
+        <div class="container shadow-lg mx-auto bg-white mt-24 md:mt-18">
+    
         </div>
+    
+        <script>
+            //Javascript to toggle the menu
+            document.getElementById('nav-toggle').onclick = function(){
+                document.getElementById("nav-content").classList.toggle("hidden");
+            }
+        </script>
+    
     </header>
+    
     <div class="main">
         <div class="container">
             {% block content %}{% endblock %}

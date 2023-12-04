@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-+n+^0pb2-l(sn+nvrf3gfi-)3e=)-ey2xi=+mj3-xvd%$(sc0r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1',]
+ALLOWED_HOSTS = ['127.0.0.1','192.168.60.174']
 
 
 # Application definition
@@ -42,11 +42,10 @@ INSTALLED_APPS = [
     # 'livereload', # pip install django-livereload-server
 
     'rosetta',
+    'tailwind',
     'mySite', # app name
     'userSystem', # login system
     
-    'tailwind',
-    'theme'
 ]
 
 MIDDLEWARE = [
@@ -152,7 +151,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/login/'
 
-TAILWIND_APP_NAME = 'theme'
+TAILWIND_APP_NAME = 'mySite'
 
 INTERNAL_IPS = [
     "127.0.0.1",
