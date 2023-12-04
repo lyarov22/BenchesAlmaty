@@ -27,7 +27,7 @@
                         </a>    
                     </div>
                 </div>
-                <a href="{% url 'mySite:index' %}">{% trans 'Список объявлений' %}</a>
+                <a href="{% url 'mySite:index' %}">{% trans 'Список скамеек' %}</a>
                 <div class="nav-right">
                     <div class="nav-langs">
                         <a href="{% url 'set_language' %}" class="nav__lang {% if LANGUAGE_CODE == 'kk' %}active{% endif %}" onclick="event.preventDefault(); document.getElementById('language-form').language.value = 'kk'; document.getElementById('language-form').submit();">Қаз</a>
@@ -42,7 +42,7 @@
                             <a href="{% url 'register' %}">{% trans 'Зарегистрироваться' %}</a>
                         {% endif %}
 
-                        <a href="{% url 'mySite:index' %}">{% trans 'Создать объявление' %}</a>
+                        <a href="{% url 'mySite:index' %}">{% trans 'Создать скамейку' %}</a>
 
                     </div>
                 </div>
