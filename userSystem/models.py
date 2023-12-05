@@ -9,10 +9,21 @@ class CustomUser(AbstractUser):
 
 
 class Profile(models.Model):
+    LEVEL_CHOICES = [
+        (0, 'Пользователь'),
+        (1, 'Активный пользователь'),
+        (2, 'Эксперт'),
+        (3, 'Лидер'),
+    ]
+
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, blank=True, default='')
+    surname = models.CharField(max_length=50, blank=True, default='')
+
     bio = models.TextField(blank=True)
     avatar = models.ImageField(default='default.png', upload_to='user_avatars/', blank=True, null=True)
-    level = models.IntegerField(default=0)
+
+    level = models.IntegerField(default=0, choices=LEVEL_CHOICES)
 
     def __str__(self):
         return self.user.username
