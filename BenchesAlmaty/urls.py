@@ -23,6 +23,8 @@ urlpatterns = [
     # profile system
     path('profile/', user_views.view_profile, name='view_profile'),
     path('profile/edit/', user_views.edit_profile, name='edit_profile'),
+
+    path('profile/<str:username>/', user_views.other_user_profile, name='other_user_profile'),
 ]
 
 if settings.DEBUG:

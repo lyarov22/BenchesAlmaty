@@ -4,6 +4,11 @@ from django.contrib.auth.models import AbstractUser
 # login system
 class CustomUser(AbstractUser):
     # Добавьте здесь дополнительные поля, если необходимо
+    email = models.EmailField(unique=True)
+    # ваша дополнительная информация
+    # ...
+    
+    USERNAME_FIELD = 'username'  # или любое другое поле, которое вы хотите использовать для входа
     pass
 
 

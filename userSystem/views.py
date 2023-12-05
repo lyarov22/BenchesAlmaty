@@ -1,4 +1,5 @@
 import os
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -6,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 
 from BenchesAlmaty import settings
-from .models import Profile
+from .models import CustomUser, Profile
 
 from .forms import RegistrationForm, LoginForm, ProfileForm
 
@@ -78,3 +79,13 @@ def edit_profile(request):
         form = ProfileForm(instance=profile)
 
     return render(request, 'userSystem/edit_profile.html', {'form': form, 'profile': profile})
+
+def other_user_profile(request, username):
+    try:
+        user = get_object_or_404(CustomUser, username=username)
+        profile = Profile.objects.get(user=user)
+    except Http404:
+        error_message = f"Профиль пользователя {username} не найден."
+        return render(request, 'userSystem/other_user_profile.html', {'error_message': error_message}, status=404)
+
+    return render(request, 'userSystem/other_user_profile.html', {'profile': profile})

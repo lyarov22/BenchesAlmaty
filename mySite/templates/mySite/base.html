@@ -19,6 +19,9 @@
     <div class="header">
         {% include 'mySite/header.html' %}
     </div>
+    <div class="error">
+        <p>{{ error_message }}</p>
+    </div>
 
     <div class="main">
         {% block content %}{% endblock %}
