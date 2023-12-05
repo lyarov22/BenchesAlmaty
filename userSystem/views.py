@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -67,8 +68,8 @@ def edit_profile(request):
         if form.is_valid():
             form.save()
             if request.POST.get('delete_avatar'):
+                profile.avatar.delete()
                 profile.avatar = None
-                os.remove(profile.get_avatar_url())
                 profile.save()
             return redirect('view_profile')
 
