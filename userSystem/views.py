@@ -68,7 +68,7 @@ def edit_profile(request):
             form.save()
             if request.POST.get('delete_avatar'):
                 profile.avatar = None
-                avatar_url = profile.get_avatar_url()
+                os.remove(profile.get_avatar_url())
                 profile.save()
             return redirect('view_profile')
 
