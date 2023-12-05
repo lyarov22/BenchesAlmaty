@@ -16,4 +16,10 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+    def get_avatar_url(self):
+        if self.avatar:
+            return self.avatar.url
+        # Здесь вы можете вернуть путь к изображению по умолчанию или другую логику по вашему выбору
+        return '/media/default.png'
 

@@ -2,6 +2,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 
+from django.core.files.storage import FileSystemStorage
+
 from BenchesAlmaty import settings
 from .models import Profile
 
@@ -64,6 +66,10 @@ def edit_profile(request):
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
+            if request.POST.get('delete_avatar'):
+                profile.avatar = None
+                avatar_url = profile.get_avatar_url()
+                profile.save()
             return redirect('view_profile')
 
     else:

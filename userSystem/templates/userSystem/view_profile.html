@@ -25,7 +25,7 @@
                         <p><strong>Имя:</strong> {{ user.first_name }}</p>
                         <p><strong>Биография:</strong> {{ profile.bio }}</p>
                         <p><strong>Аватар:</strong></p>
-                        <img src="{{ profile.avatar.url }}" alt="Аватар пользователя">
+                        <img src="{{ profile.get_avatar_url }}" alt="Аватар пользователя">
                     {% else %}
                         <p>Этот профиль приватный, и доступ к нему ограничен.</p>
                     {% endif %}

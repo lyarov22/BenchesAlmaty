@@ -161,3 +161,5 @@ NPM_BIN_PATH = "C:/Program Files/nodejs/npm.cmd"
 
 
 AUTH_USER_MODEL = 'userSystem.CustomUser'
+
+DEFAULT_AVATAR = MEDIA_ROOT + 'default.png'

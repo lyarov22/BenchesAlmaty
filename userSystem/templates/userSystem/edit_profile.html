@@ -24,14 +24,22 @@
 
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <label for="first_name">Имя:</label>
-                        <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}">
+                        <label for="id_name">Имя:</label>
+                        <input type="text" id="id_name" name="name" value="{{ profile.name }}">
+                        <br>
+                        <label for="id_surname">Фамилия:</label>
+                        <input type="text" id="id_surname" name="surname" value="{{ profile.surname }}">
+                        <br>
                         <label for="id_bio">Биография:</label>
                         <textarea id="id_bio" name="bio">{{ profile.bio }}</textarea>
                         <br>
                         <label for="id_avatar">Аватар:</label>
-                        <img src="{{ profile.avatar.url }}" alt="Аватар пользователя">
+                        <img src="{{ profile.get_avatar_url }}" alt="Аватар пользователя">
                         <input type="file" id="id_avatar" name="avatar">
+                        <br>
+                        <label for="delete_avatar">Удалить фото:</label>
+                        <input type="checkbox" id="delete_avatar" name="delete_avatar" value="true">
+
                         <br>
                         <input type="submit" value="Сохранить">
                     </form>
