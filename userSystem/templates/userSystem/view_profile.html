@@ -21,6 +21,7 @@
                 {% block content %}
                     <h1>Профиль пользователя</h1>
                     {% if user == request.user or profile.visibility == 'public' %}
+                        <p>IP-адрес пользователя: {{ user_ip }}</p>
                         <p><strong>Зарегистрирован:</strong> {{ user.username }}</p>
                         <p><strong>Почта:</strong> {{ user.email }}</p>
                         <p><strong>Админ?:</strong> {{ user.is_staff }}</p>

@@ -14,6 +14,7 @@ class Profile(models.Model):
         (1, 'Активный пользователь'),
         (2, 'Эксперт'),
         (3, 'Лидер'),
+        (4, 'Администрация⭐'),
     ]
 
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)

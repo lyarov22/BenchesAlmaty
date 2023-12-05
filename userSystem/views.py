@@ -45,6 +45,7 @@ def user_logout(request):
 # profile system
 @login_required
 def view_profile(request):
+    user_ip = request.META.get('REMOTE_ADDR', None)
     try:
         profile = Profile.objects.get(user=request.user)
     except Profile.DoesNotExist:
@@ -52,7 +53,7 @@ def view_profile(request):
         profile = Profile(user=request.user)
         profile.save()
     
-    return render(request, 'userSystem/view_profile.html', {'profile': profile})
+    return render(request, 'userSystem/view_profile.html', {'profile': profile, 'user_ip': user_ip})
 
 @login_required
 def edit_profile(request):
