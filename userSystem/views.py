@@ -1,12 +1,8 @@
-import os
 from django.http import Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 
-from django.core.files.storage import FileSystemStorage
-
-from BenchesAlmaty import settings
 from .models import CustomUser, Profile
 
 from .forms import RegistrationForm, LoginForm, ProfileForm

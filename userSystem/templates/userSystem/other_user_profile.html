@@ -1,50 +1,24 @@
 {% extends "mySite/base.html" %}
-{% load static %}
-{% load i18n %}
-{% get_current_language as language_code %}
+{% block content %}
+{% if profile %}
+    <h2>Профиль пользователя</h2>
+    <p>Имя пользователя: {{ profile.user.username }}</p>
+    <p>Почта: {{ profile.user.email }}</p>
 
-<!DOCTYPE html>
-<html lang="{{ language_code }}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'mySite/register.css' %}">
-    {% endblock %}
-    {% block title %}view profile{% endblock %}
-</head>
-<body>
-    <div class="profile">
-        {% include 'mySite/base.html' %} 
-        <div class="container">
-            <div class="profile-container">
-                {% block content %}
-                    {% if profile %}
-                    <!-- Ваш код для отображения профиля -->
-                    <p><strong>Зарегистрирован:</strong> {{ profile.user.username }}</p>
-                    <p><strong>Почта:</strong> {{ profile.user.email }}</p>
-                    <p><strong>Админ?:</strong> {{ profile.user.is_staff }}</p>
-                    <p><strong>Последний вход:</strong> {{ profile.user.last_login }}</p>
-                    <p><strong>Имя пользователя:</strong> {{ profile.user.date_joined }}</p>
-                    <p><strong>Уровень:</strong> {{ profile.get_level_display }}</p>
-                    <p><strong>Имя:</strong> {{ profile.name }}</p>
-                    <p><strong>Фамилия:</strong> {{ profile.surname }}</p>
-                    <p><strong>Биография:</strong> {{ profile.bio }}</p>
-                    <p><strong>Аватар:</strong></p>
-                    <img src="{{ profile.get_avatar_url }}" alt="Аватар пользователя">
-                    <!-- Другие поля профиля -->
-                    {% else %}
-                    <!-- Ваш код для отображения сообщения об ошибке -->
-                    <p>{{ error_message }}</p>
-                    {% endif %}
-                    <h1>Профиль пользователя</h1>
+    <p>Уровень: {{ profile.get_level_display }}</p>
 
-                    
+    <p>Имя: {{ profile.name }}</p>
+    <p>Фамилия: {{ profile.surname }}</p>
+    <p>Биография: {{ profile.bio }}</p>
 
-                {% endblock %}
-            </div>
+    <p>Аватар:</strong></p>
+    <img src="{{ profile.get_avatar_url }}" alt="Аватар пользователя">
 
-        </div>
-    </div>
-</body>
-</html>
+    <p>Дата регистрации: {{ profile.user.date_joined }}</p>
+    <p>Последний вход: {{ profile.user.last_login }}</p>
+
+{% else %}
+    <p>{{ error_message }}</p>
+{% endif %}
+
+{% endblock %}
