@@ -1,49 +1,32 @@
 {% extends "mySite/base.html" %}
-{% load static %}
-{% load i18n %}
-{% get_current_language as language_code %}
 
-<!DOCTYPE html>
-<html lang="{{ language_code }}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'mySite/register.css' %}">
-    {% endblock %}
-    {% block title %}view profile{% endblock %}
-</head>
-<body>
-    <div class="profile">
-        {% include 'mySite/base.html' %} 
-        <div class="container">
-            <div class="profile-container">
-                {% block content %}
-                    <h1>Профиль пользователя</h1>
-                    {% if user == request.user or profile.visibility == 'public' %}
-                        <p>IP-адрес пользователя: {{ user_ip }}</p>
-                        <p><strong>Зарегистрирован:</strong> {{ user.username }}</p>
-                        <p><strong>Почта:</strong> {{ user.email }}</p>
-                        <p><strong>Админ?:</strong> {{ user.is_staff }}</p>
-                        <p><strong>Последний вход:</strong> {{ user.last_login }}</p>
-                        <p><strong>Имя пользователя:</strong> {{ user.date_joined }}</p>
-                        <p><strong>Уровень:</strong> {{ profile.get_level_display }}</p>
-                        <p><strong>Имя:</strong> {{ profile.name }}</p>
-                        <p><strong>Фамилия:</strong> {{ profile.surname }}</p>
-                        <p><strong>Биография:</strong> {{ profile.bio }}</p>
-                        <p><strong>Аватар:</strong></p>
-                        <img src="{{ profile.get_avatar_url }}" alt="Аватар пользователя">
-                    {% else %}
-                        <p>Этот профиль приватный, и доступ к нему ограничен.</p>
-                    {% endif %}
-                    {% if user == request.user %}
-                        <a href="{% url 'edit_profile' %}">Редактировать профиль</a>
-                        <a href="{% url 'logout' %}">Выйти</a>
-                    {% endif %}
-                {% endblock %}
-            </div>
+{% block title %}view profile{% endblock %}
+{% block content %}
+<h1>Профиль пользователя</h1>
+{% if user == request.user or profile.visibility == 'public' %}
 
-        </div>
-    </div>
-</body>
-</html>
+    <p>IP-адрес пользователя: {{ user_ip }}</p>
+
+    <p>Имя пользователя: {{ user.username }}</p>
+    <p>Почта: {{ user.email }}</p>
+
+    <p>Уровень: {{ profile.get_level_display }}</p>
+
+    <p>Имя: {{ profile.name }}</p>
+    <p>Фамилия: {{ profile.surname }}</p>
+    <p>Биография: {{ profile.bio }}</p>
+
+    <p>Аватар:</strong></p>
+    <img src="{{ profile.get_avatar_url }}" alt="Аватар пользователя">
+
+    <p>Дата регистрации: {{ user.date_joined }}</p>
+    <p>Последний вход: {{ user.last_login }}</p>
+
+{% else %}
+    <p>Этот профиль приватный, и доступ к нему ограничен.</p>
+{% endif %}
+{% if user == request.user %}
+    <a href="{% url 'edit_profile' %}">Редактировать профиль</a>
+    <a href="{% url 'logout' %}">Выйти</a>
+{% endif %}
+{% endblock %}
