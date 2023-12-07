@@ -1,5 +1,4 @@
-{% load static %}
-{% load static tailwind_tags %}
+{% load static tailwind_tags i18n %}
 {% load i18n %}
 {% get_current_language as language_code %}
 
@@ -11,11 +10,11 @@
     {% tailwind_css %}
 
     <title>
-        {% block title %}{% endblock %} — {% trans 'Карта скамеек Алматы' %} 
+        {% block title %}{% endblock %} — {% trans 'Карта скамеек Алматы' %}
     </title>
 
 </head>
-<body>
+<body class="font-sans">
     <div class="header">
         {% include 'mySite/header.html' %}
     </div>

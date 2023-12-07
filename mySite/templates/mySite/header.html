@@ -5,7 +5,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
 
-<header class="font-sans leading-normal tracking-normal z-999 bg">
+<header class="leading-normal tracking-normal z-999 bg">
 
     <nav class="bg-yellow-50 flex items-center justify-between flex-wrap bg-grey-darkest p-9 fixed w-full z-10 pin-t -mt-28">
         <div class="flex items-center flex-no-shrink text-white mr-6">
@@ -50,7 +50,13 @@
                     <div x-data="{ open: false }" class="relative inline-block text-left">
                       <button @click="open = !open" class="inline-flex justify-center w-full px-4 py-2 font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-gray-100 focus:ring-blue-500">
                         {% trans 'Профиль' %}
-                        <img class="h-7 w-7 ml-2 rounded-xl" src="{{ profile.get_avatar_url }}" alt="avatar">
+
+                        {% if user.is_authenticated %}
+                          <img class="h-7 w-7 ml-2 rounded-xl" src="{{ profile.get_avatar_url }}" alt="avatar">
+                        {% else %}
+
+                        {% endif %}
+
                         <svg class="h-5 w-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
