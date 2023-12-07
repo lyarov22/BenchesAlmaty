@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'tailwind',
     'mySite', # app name
     'userSystem', # login system
+    'benches',
 
     'django_browser_reload',
     

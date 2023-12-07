@@ -39,4 +39,9 @@ class Profile(models.Model):
             return self.avatar.url
         # Здесь вы можете вернуть путь к изображению по умолчанию или другую логику по вашему выбору
         return '/media/default.png'
+    
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = self.user.username
+        super(Profile, self).save(*args, **kwargs)
 
