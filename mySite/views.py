@@ -16,3 +16,4 @@ def index(request):
         return render(request, "mySite/index.html")
 
 
+# ПОФИКСИТЬ КОСТЫЛЬ С ОТОБРАЖЕНИЕМ ФОТО, СДЕЛАТЬ ПРОВЕРКУ В ШАБЛОНЕ

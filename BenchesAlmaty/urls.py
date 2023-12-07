@@ -5,6 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from userSystem import views as user_views
+from benches import views as benches_views
 
 app_name = 'mySite'
 
@@ -25,6 +26,9 @@ urlpatterns = [
     path('profile/edit/', user_views.edit_profile, name='edit_profile'),
 
     path('profile/<str:username>/', user_views.other_user_profile, name='other_user_profile'),
+
+    # bench system
+    path('benches/', include('benches.urls')),
 
     path("__reload__/", include("django_browser_reload.urls")),
 ]

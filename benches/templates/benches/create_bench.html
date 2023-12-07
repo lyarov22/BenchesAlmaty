@@ -1,0 +1,16 @@
+{% extends "mySite/base.html" %}
+
+{% block title %}create_bench{% endblock %}
+
+{% block content %}
+<h1>Create Bench</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ bench_form.as_p }}
+    {{ image_form.as_p }}
+
+    <button type="submit">Create Bench</button>
+
+  </form>
+{% endblock %}

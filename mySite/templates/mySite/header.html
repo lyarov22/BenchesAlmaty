@@ -37,10 +37,10 @@
                 </a>
 
                 <li class="mr-3">
-                    <a class="hover:text-green-500" href="{% url 'mySite:index' %}">{% trans 'Список скамеек' %}</a>
+                    <a class="hover:text-green-500" href="{% url 'benches:bench_list' %}">{% trans 'Список скамеек' %}</a>
                 </li>
                 <li class="mr-3">
-                    <a href="{% url 'mySite:index' %}" class="inline-block text-grey-dark no-underline hover:text-green-500 hover:text-underline py-2 lg:px-4">{% trans 'Создать скамейку' %}</a>
+                    <a href="{% url 'benches:create_bench' %}" class="inline-block text-grey-dark no-underline hover:text-green-500 hover:text-underline py-2 lg:px-4">{% trans 'Создать скамейку' %}</a>
                 </li>
                 
             </ul>

@@ -76,6 +76,12 @@ class Bench(models.Model):
     def __str__(self):
         return str(self.id)
     
+    def get_avatar_url(self):
+        if self.avatar:
+            return self.avatar.url
+        # Здесь вы можете вернуть путь к изображению по умолчанию или другую логику по вашему выбору
+        return '/media/default.png'
+    
 
 class BenchImage(models.Model):
     bench = models.ForeignKey(Bench, on_delete=models.CASCADE, related_name='images')
@@ -83,7 +89,7 @@ class BenchImage(models.Model):
     def image_upload_to(instance, filename):
         return f'bench_images/{instance.bench.id}/{filename}'
     
-    image = models.ImageField(upload_to=image_upload_to, verbose_name='Дополнительное фото')
+    image = models.ImageField(upload_to=image_upload_to, verbose_name='Дополнительное фото', blank=True, null=True)
 
     def __str__(self):
         return f"{self.bench.id} Image"

@@ -1,0 +1,25 @@
+{% extends "mySite/base.html" %}
+
+{% block title %}bench list{% endblock %}
+
+{% block content %}
+  <h2>Bench List</h2>
+
+  {% for bench in benches %}
+    <div>
+      <h3>{{ bench.id }} - {{ bench.deskription }}</h3>
+      <p>Rating: {{ bench.rating }}</p>
+      <p>Latitude: {{ bench.location_latitude }}</p>
+      <p>Longitude: {{ bench.location_longitude }}</p>
+      <p>Has Backrest: {{ bench.has_backrest }}</p>
+      <p>Has Bin: {{ bench.has_bin }}</p>
+      <p>Created Date: {{ bench.created_date }}</p>
+      <p>Author: {{ bench.author.username }}</p>
+      <p>Type: {{ bench.type.name }}</p>
+      <p>District: {{ bench.district.name }}</p>
+      <p>Environment: {{ bench.environment.name }}</p>
+      <img src="{{ bench.get_avatar_url }}" alt="">
+    </div>
+    <hr>
+  {% endfor %}
+{% endblock %}
