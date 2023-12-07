@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'tailwind',
     'mySite', # app name
     'userSystem', # login system
+
+    'django_browser_reload',
     
 ]
 
@@ -57,6 +59,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+
+    'django_browser_reload.middleware.BrowserReloadMiddleware',
 ]
 
 ROOT_URLCONF = 'BenchesAlmaty.urls'

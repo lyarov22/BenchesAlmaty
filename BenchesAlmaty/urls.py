@@ -25,6 +25,8 @@ urlpatterns = [
     path('profile/edit/', user_views.edit_profile, name='edit_profile'),
 
     path('profile/<str:username>/', user_views.other_user_profile, name='other_user_profile'),
+
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
 
 if settings.DEBUG:
