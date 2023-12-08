@@ -5,44 +5,61 @@
 {% block title %}bench list{% endblock %}
 
 {% block content %}
-  <h2>Bench List</h2>
+  <h2 class="text-2xl">Bench List</h2>
+  <div class="bg-gray-800 text-white py-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <!-- Фильтры -->
+      <div class="space-x-4">
+        <button class="hover:text-gray-300">Фильтр 1</button>
+        <button class="hover:text-gray-300">Фильтр 2</button>
+        <button class="hover:text-gray-300">Фильтр 3</button>
+      </div>
+      <!-- Другие элементы управления или фильтры могут быть добавлены сюда -->
 
-  {% for bench in benches %}
-    <div>
-      <hr>
-      <h3>Скамейка {{ bench.id }}</h3>
-      <p>Rating: {{ bench.rating }}</p>
-      <p>
-        {% for i in "0123456789"|slice:bench.get_rating %}
-          ⭐
-        {% endfor %}
-      </p>
-
-
-
-      
-
-      <p>{{ bench.type.name }}, {{ bench.district.name }}, {{ bench.environment.name }}
-        {% if bench.has_backrest %}
-          , {% trans 'со спинкой' %}
-        {% elif bench.has_backrest %}
-          , {% trans 'без спинки' %}
-        {% endif %}
-
-        {% if bench.has_bin %}
-          , {% trans 'с урной' %}
-        {% elif bench.has_backrest %}
-          , {% trans 'без урны' %}
-        {% endif %}
-      </p>
-      <p>Latitude: {{ bench.location_latitude }}</p>
-      <p>Longitude: {{ bench.location_longitude }}</p>
-      <p>Has Backrest: {{ bench.has_backrest }}</p>
-      <p>Has Bin: {{ bench.has_bin }}</p>
-      <p>{{ bench.author.username }} в {{ bench.created_date }}</p>
-
-      <img src="{{ bench.get_avatar_url }}" alt="">
     </div>
-    <hr>
-  {% endfor %}
+  </div>
+  
+  <div class="container mx-auto mt-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      {% for bench in benches %}
+      <div class="bg-white p-6 rounded-lg shadow-md">
+
+        <h3 class="text-xl">Скамейка {{ bench.id }}</h3>
+        <p>Rating: {{ bench.rating }}</p>
+        <p>
+          {% for i in "0123456789"|slice:bench.get_rating %}
+            ⭐
+          {% endfor %}
+        </p>
+  
+        <p class="lowercase">
+          <a class="underline" href="#">{% trans 'Показать на карте' %}</a>,
+          {{ bench.district.name }},
+          {{ bench.environment.name }}
+  
+          {% if bench.has_backrest %}
+            , {% trans 'со спинкой' %}
+          {% elif bench.has_backrest %}
+            , {% trans 'без спинки' %}
+          {% endif %}
+  
+          {% if bench.has_bin %}
+            , {% trans 'с урной' %}
+          {% elif bench.has_backrest %}
+            , {% trans 'без урны' %}
+          {% endif %}
+  
+          , {{ bench.type.name }}
+  
+        </p>
+  
+        <p>Добавил <a class="underline" target="_blank" href="{% url 'other_user_profile' bench.author.username %}">{{ bench.author.username }}</a> {% trans 'в' %} {{ bench.created_date|date:"G:i, j E Y"  }}</p>
+
+        <img class="h-36" src="{{ bench.get_avatar_url }}" alt="">
+      </div>
+    {% endfor %}
+    </div>
+  </div>
+
+
 {% endblock %}
