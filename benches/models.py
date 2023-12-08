@@ -82,6 +82,11 @@ class Bench(models.Model):
         # Здесь вы можете вернуть путь к изображению по умолчанию или другую логику по вашему выбору
         return '/media/default.png'
     
+    def get_rating(self):
+        rating = int(self.rating)
+
+        return int(rating)
+    
 
 class BenchImage(models.Model):
     bench = models.ForeignKey(Bench, on_delete=models.CASCADE, related_name='images')

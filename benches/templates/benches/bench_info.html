@@ -1,7 +1,5 @@
 {% extends "mySite/base.html" %}
 
-{% load static tailwind_tags i18n %}
-
 {% block title %}bench list{% endblock %}
 
 {% block content %}
@@ -16,31 +14,19 @@
         {% for i in "0123456789"|slice:bench.get_rating %}
           ⭐
         {% endfor %}
-      </p>
-
-
-
       
 
-      <p>{{ bench.type.name }}, {{ bench.district.name }}, {{ bench.environment.name }}
-        {% if bench.has_backrest %}
-          , {% trans 'со спинкой' %}
-        {% elif bench.has_backrest %}
-          , {% trans 'без спинки' %}
-        {% endif %}
-
-        {% if bench.has_bin %}
-          , {% trans 'с урной' %}
-        {% elif bench.has_backrest %}
-          , {% trans 'без урны' %}
-        {% endif %}
       </p>
       <p>Latitude: {{ bench.location_latitude }}</p>
       <p>Longitude: {{ bench.location_longitude }}</p>
       <p>Has Backrest: {{ bench.has_backrest }}</p>
       <p>Has Bin: {{ bench.has_bin }}</p>
-      <p>{{ bench.author.username }} в {{ bench.created_date }}</p>
-
+      <p>Created Date: {{ bench.created_date }}</p>
+      <p>Author: {{ bench.author.username }}</p>
+      <p>Type: {{ bench.type.name }}</p>
+      <p>District: {{ bench.district.name }}</p>
+      <p>Environment: {{ bench.environment.name }}</p>
+      <p>Описание {{ bench.deskription }}</p>
       <img src="{{ bench.get_avatar_url }}" alt="">
     </div>
     <hr>
