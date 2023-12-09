@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-from benches.models import Bench
+from benches.models import Bench, BenchDistrict, BenchType
 from .forms import BenchForm, BenchImageForm
 
 def create_bench(request):
@@ -27,4 +27,22 @@ def create_bench(request):
 
 def bench_list(request):
     benches = Bench.objects.all()
-    return render(request, 'benches/bench_list.html', {'benches': benches})
+    districts = BenchDistrict.objects.all()
+    bench_types = BenchType.objects.all()
+
+    # Фильтрация по району
+    district_slug = request.GET.get('district')
+    if district_slug:
+        benches = benches.filter(district__slug=district_slug)
+
+    # Фильтрация по типу
+    type_slug = request.GET.get('type')
+    if type_slug:
+        benches = benches.filter(type__slug=type_slug)
+
+    # Если запрос делается через AJAX, вернуть только HTML-код результатов
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return render(request, 'benches/bench_list_results.html', {'benches': benches})
+
+    return render(request, 'benches/bench_list.html', {'benches': benches, 'districts': districts, 'bench_types': bench_types})
+    

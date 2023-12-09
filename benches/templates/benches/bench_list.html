@@ -9,12 +9,27 @@
   <div class="bg-gray-800 text-white py-4">
     <div class="container mx-auto flex justify-between items-center">
       <!-- Фильтры -->
-      <div class="space-x-4">
-        <button class="hover:text-gray-300">Фильтр 1</button>
-        <button class="hover:text-gray-300">Фильтр 2</button>
-        <button class="hover:text-gray-300">Фильтр 3</button>
-      </div>
-      <!-- Другие элементы управления или фильтры могут быть добавлены сюда -->
+      <form method="get" action="{% url 'benches:bench_list' %}">
+        <label for="district">Фильтр по району:</label>
+        <select name="district" id="district">
+            <option value="" selected>Все районы</option>
+            <!-- Добавьте опции динамически на основе ваших районов -->
+            {% for district in districts %}
+                <option value="{{ district.slug }}">{{ district.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="type">Фильтр по типу:</label>
+        <select name="type" id="type">
+            <option value="" selected>Все типы</option>
+            <!-- Добавьте опции динамически на основе ваших типов -->
+            {% for bench_type in bench_types %}
+                <option value="{{ bench_type.slug }}">{{ bench_type.name }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Фильтр</button>
+    </form>
 
     </div>
   </div>
@@ -45,7 +60,7 @@
   
           {% if bench.has_bin %}
             , {% trans 'с урной' %}
-          {% elif bench.has_backrest %}
+          {% elif bench.has_bin %}
             , {% trans 'без урны' %}
           {% endif %}
   
