@@ -3,7 +3,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 from userSystem.models import CustomUser
 
-
 class BenchType(models.Model):
     name = models.CharField(max_length=200, db_index=True, verbose_name='Тип скамейки')
     slug = models.SlugField(max_length=200, db_index=True, unique=True, verbose_name='Ссылка')
@@ -51,7 +50,7 @@ class Bench(models.Model):
     location_latitude = models.FloatField(verbose_name="Широта")
     location_longitude = models.FloatField(verbose_name="Долгота")
 
-    avatar = models.ImageField(default='default.png', upload_to='bench_avatars/', blank=True, null=True)
+    avatar = models.ImageField(default='noBenchImage.png', upload_to='bench_avatars/', blank=True, null=True)
 
     rating = models.FloatField(default=0.0, validators=[MinValueValidator(0.0), MaxValueValidator(5.0)],)
 
@@ -86,6 +85,9 @@ class Bench(models.Model):
         rating = int(self.rating)
 
         return int(rating)
+    
+    def image_upload_to(instance, filename):
+        return f'bench_images/{instance.bench.id}/avatar/{filename}'
     
 
 class BenchImage(models.Model):

@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 
+from django.db.models import Count
+
 from benches.models import Bench, BenchDistrict, BenchType
 from .forms import BenchForm, BenchImageForm
 
@@ -24,25 +26,50 @@ def create_bench(request):
 
     return render(request, 'benches/create_bench.html', {'bench_form': bench_form, 'image_form': image_form})
 
+def bench_count():
+    benches = Bench.objects.all()
+    return benches
 
 def bench_list(request):
     benches = Bench.objects.all()
-    districts = BenchDistrict.objects.all()
-    bench_types = BenchType.objects.all()
+    districts = BenchDistrict.objects.annotate(districtBenchesCount=Count('bench')).all()
+    bench_types = BenchType.objects.annotate(bench_typesCount=Count('bench')).all()
 
     # Фильтрация по району
     district_slug = request.GET.get('district')
     if district_slug:
         benches = benches.filter(district__slug=district_slug)
-
+        
     # Фильтрация по типу
     type_slug = request.GET.get('type')
     if type_slug:
         benches = benches.filter(type__slug=type_slug)
 
-    # Если запрос делается через AJAX, вернуть только HTML-код результатов
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        return render(request, 'benches/bench_list_results.html', {'benches': benches})
+    # Фильтрация по наличию/отсутствию урны
+    has_bin = request.GET.get('has_bin')
+    if has_bin:
+        benches = benches.filter(has_bin=True)
+    elif has_bin == '0':
+        benches = benches.filter(has_bin=False)
 
-    return render(request, 'benches/bench_list.html', {'benches': benches, 'districts': districts, 'bench_types': bench_types})
+    # Фильтрация по наличию/отсутствию спинки
+    has_backrest = request.GET.get('has_backrest')
+    if has_backrest:
+        benches = benches.filter(has_backrest=True)
+    elif has_backrest == '0':
+        benches = benches.filter(has_backrest=False)
+
+    benches = benches.annotate(districtBenchesCount=Count('id'))
+
+    return render(request, 
+        'benches/bench_list.html', 
+        {'benches': benches, 'districts': districts, 'bench_types': bench_types, 
+        'benchesAll':  bench_count().count,
+
+        'hasBackrestNow': benches.filter(has_backrest=True).count, 
+        'hasBinNow': benches.filter(has_bin=True).count,
+         
+        'hasBackrestAll': bench_count().filter(has_backrest=True).count,
+        'hasBinAll': bench_count().filter(has_bin=True).count,
+        })
     

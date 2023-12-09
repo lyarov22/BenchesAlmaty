@@ -5,37 +5,93 @@
 {% block title %}bench list{% endblock %}
 
 {% block content %}
-  <h2 class="text-2xl">Bench List</h2>
-  <div class="bg-gray-800 text-white py-4">
+  <div class="py-4">
+    <hr>
+    <br>
     <div class="container mx-auto flex justify-between items-center">
-      <!-- Фильтры -->
-      <form method="get" action="{% url 'benches:bench_list' %}">
-        <label for="district">Фильтр по району:</label>
-        <select name="district" id="district">
-            <option value="" selected>Все районы</option>
-            <!-- Добавьте опции динамически на основе ваших районов -->
-            {% for district in districts %}
-                <option value="{{ district.slug }}">{{ district.name }}</option>
-            {% endfor %}
-        </select>
-
-        <label for="type">Фильтр по типу:</label>
-        <select name="type" id="type">
-            <option value="" selected>Все типы</option>
-            <!-- Добавьте опции динамически на основе ваших типов -->
-            {% for bench_type in bench_types %}
-                <option value="{{ bench_type.slug }}">{{ bench_type.name }}</option>
-            {% endfor %}
-        </select>
-
-        <button type="submit">Фильтр</button>
-    </form>
+      <h2 class="text-2xl">Список скамеек</h2>
+      
 
     </div>
+    <br>
+    <hr>
   </div>
   
   <div class="container mx-auto mt-8">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col">
+        <h3 class="text-xl">Найдено скамеек: {{ benches.count }}, Всего {{ benchesAll }}</h3>
+      
+        <br>
+        <form method="get" action="{% url 'benches:bench_list' %}" class="flex-grow flex flex-col">
+            <label for="district">Район:</label>
+            <select name="district" id="district">
+              <option value="" selected>Все районы</option>
+              <!-- Добавьте опции динамически на основе ваших районов -->
+              {% for district in districts %}
+                  <option value="{{ district.slug }}">{{ district.name }} (Всего {{ district.districtBenchesCount }})</option>
+              {% endfor %}
+          </select>
+          
+          <br>
+          
+          <label for="type">Тип</label>
+          <select name="type" id="type">
+              <option value="" selected>Все типы</option>
+              <!-- Добавьте опции динамически на основе ваших типов -->
+              {% for bench_type in bench_types %}
+                  <option value="{{ bench_type.slug }}">{{ bench_type.name }} (Всего {{ bench_type.bench_typesCount }})</option>
+              {% endfor %}
+          </select>
+          
+            <br>
+            <label for="has_bin">С урной (Найдено {{ hasBinNow }}, Всего {{ hasBinAll }})</label>
+            <input type="checkbox" name="has_bin" id="has_bin" {% if request.GET.has_bin %}checked{% endif %} value="checked">
+        
+            <label for="has_backrest">Со спинкой (Найдено {{ hasBackrestNow }}, Всего {{ hasBackrestAll }})</label>
+            <input type="checkbox" name="has_backrest" id="has_backrest" {% if request.GET.has_backrest %}checked{% endif %}>
+            <br>
+            <div class="flex-grow"></div> <!-- Этот элемент будет занимать все доступное пространство, поднимая кнопку вниз -->
+            <div class="flex flex-row items-center">
+              <button class="border-2 rounded-lg p-2 bg-blue-500 hover:bg-blue-300 transition duration-300 ease-in-out flex-grow">
+                Показать
+              </button>
+
+              <a class="" href="{% url 'benches:bench_list' %}">
+                <img class="h-12" src="{% static 'img/reset.png' %}" alt="">
+              </a>
+
+            </div>
+
+            
+        </form>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+              $(document).ready(function () {
+                  // Восстанавливаем значения из локального хранилища
+                  var selectedDistrict = localStorage.getItem('selectedDistrict');
+                  var selectedType = localStorage.getItem('selectedType');
+          
+                  // Устанавливаем значения для select
+                  $('#district').val(selectedDistrict);
+                  $('#type').val(selectedType);
+          
+                  // Обработчик события для сохранения выбора пользователя
+                  $('select').on('change', function () {
+                      var selectedDistrict = $('#district').val();
+                      var selectedType = $('#type').val();
+          
+                      localStorage.setItem('selectedDistrict', selectedDistrict);
+                      localStorage.setItem('selectedType', selectedType);
+                  });
+              });
+        </script>
+        
+        
+    </div>
+    
+    
+      
       {% for bench in benches %}
       <div class="bg-white p-6 rounded-lg shadow-md">
 
