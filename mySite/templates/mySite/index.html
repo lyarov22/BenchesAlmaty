@@ -1,15 +1,114 @@
 {% extends "mySite/base.html" %}
+{% load static tailwind_tags i18n %}
+
 {% block title %}index{% endblock %}
 
 {% block content %}
 <body class="bg-gray-50 leading-normal tracking-normal">
+	<script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full&skin=dark"></script>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+
 	<div class="container mx-auto">
-		<section class="flex items-center justify-center h-screen">
-			<h1 class="text-5xl">Django + Tailwind = ❤️</h1>
-		</section>
+
+		<div id="map" style="width:100vh; height:100vh"></div>
+		<p>Скаймейка 1234 <br>
+		</p>
+
 	</div>
-	<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Explicabo laborum eveniet autem debitis atque ut doloremque, error saepe deserunt. Necessitatibus aliquam accusamus quas minima voluptatem explicabo ratione distinctio cum fuga!</p>
-	Lorem ipsum dolor sit amet, consectetur adipisicing elit. In sapiente et voluptatibus, necessitatibus consequuntur quibusdam cum esse itaque praesentium. Laborum optio assumenda repellendus possimus! Architecto natus saepe cumque incidunt mollitia nisi, repudiandae voluptate repellat aut consequatur dolorum nam reprehenderit, eum sunt ea quasi obcaecati. Dolorum modi pariatur iusto, ipsum culpa sunt porro asperiores quos vel ullam nobis similique fugit ipsam fugiat, laudantium reprehenderit? Voluptates laudantium iste libero exercitationem voluptatibus modi porro, ratione inventore a earum explicabo voluptatem ut quas neque vel mollitia et nobis reiciendis soluta accusamus? Praesentium, a corporis id iusto eius fugit excepturi cum aliquam qui ratione! Rem et earum aut, similique eos maxime, id odio nemo explicabo ea doloremque alias! Tempora commodi nam pariatur iusto facere voluptate aspernatur in ipsum placeat modi. Dolorem ex, a quas fuga fugiat veritatis voluptatem illum molestias sequi numquam hic eos inventore, quaerat sint voluptatum maxime aliquam ipsam ut asperiores nobis sunt harum earum vero quod! Quod blanditiis facere, maiores soluta commodi explicabo in hic consectetur maxime ea magnam distinctio neque voluptas odit sit, illum ab expedita numquam nihil quam accusantium quibusdam nemo, quas atque. Voluptatum reprehenderit, pariatur molestiae odio quos laboriosam unde accusantium minus eligendi ducimus atque eaque reiciendis tempora expedita saepe similique ea vel officia, temporibus, corrupti voluptas consequuntur amet provident ipsa. Fugiat officiis repellat molestias omnis vero aperiam similique, fuga distinctio voluptatum aut consequuntur dolorum natus quas quo accusantium accusamus, deleniti quisquam suscipit ipsa illo porro inventore commodi laboriosam excepturi. Nemo ullam at, quaerat deleniti ex eaque id voluptate dolore hic impedit ut! Voluptates iure expedita, doloremque, rem, animi debitis omnis amet inventore explicabo nemo obcaecati deleniti eligendi. Sapiente voluptatem consequuntur distinctio repellat, dolore explicabo voluptates totam a quis assumenda suscipit, optio qui labore ullam laboriosam architecto ad aliquam nulla nostrum odio error! Quibusdam reiciendis sequi doloremque labore modi voluptates neque cumque eligendi repudiandae placeat voluptatem molestias, inventore et, dolorem aliquam fugiat soluta eveniet magnam quia aut optio, voluptate repellat quo. Suscipit vel totam, quam itaque vitae modi dicta, saepe nihil dolor autem mollitia nesciunt soluta asperiores aliquam dolorum. Obcaecati earum doloribus eaque assumenda optio, nostrum odio, quidem expedita, tempora aperiam qui a perspiciatis dolorum voluptates eligendi veniam odit in. Aspernatur beatae neque, ipsum sit sapiente soluta ea molestias dignissimos repellendus nulla consequatur voluptates. Aperiam reiciendis officiis ad consequuntur. Nemo, voluptates ad? Eveniet voluptatibus dolore, ullam maxime recusandae quibusdam, architecto, odit delectus voluptas iure earum tempore culpa nostrum optio mollitia nam laboriosam provident vitae. Cum suscipit, quos doloremque aspernatur eos impedit dicta sed! Quod in iure repellendus iusto temporibus ducimus magnam ad, numquam odio laudantium! Asperiores, quos quae earum cum laboriosam tempora tempore sequi distinctio sed quia reiciendis? Sit, architecto amet inventore odit vitae obcaecati, natus vel ullam ipsa voluptatem sint quos iure consequatur! Quia voluptatum neque unde quasi tempora accusamus illum beatae similique exercitationem aspernatur sit ducimus architecto esse nisi, dolor quis sed velit impedit incidunt voluptas aliquid error officia! Voluptate praesentium cumque earum asperiores necessitatibus! Enim praesentium quas accusamus mollitia nemo cum eius consectetur, repudiandae nesciunt neque amet voluptas natus reiciendis similique ad? Vero excepturi, corrupti voluptatem quasi eius iusto nulla dicta dolore fugiat laudantium doloribus voluptatum provident minus optio quidem aut dignissimos accusantium? Hic itaque quo officia, rem totam exercitationem quas. Iste veniam, reiciendis, nemo fugit veritatis inventore suscipit non eum sapiente dolor modi ipsum? Quibusdam, eius quisquam sed blanditiis id eaque odit dicta iste nemo laudantium animi possimus ducimus consequatur ex dolorem reprehenderit asperiores magnam impedit maiores? Deserunt voluptates fuga esse aspernatur, beatae eum deleniti odit optio. Tempore minus repudiandae quam laboriosam labore ex assumenda soluta commodi nemo, aspernatur voluptates nisi sit iure eaque obcaecati, hic quaerat modi vel et fugiat iusto sint! Exercitationem vel quas minus consequatur aliquam temporibus aliquid numquam itaque quod nemo id dolor ex suscipit eius nihil quam fugit, commodi, impedit quis? Architecto, cupiditate! Sunt officiis dolorum rerum vero. Tempore officiis, obcaecati provident iste eaque dicta debitis iure culpa quo fugiat asperiores, possimus repellat. Aperiam asperiores molestias officia esse rerum nostrum, voluptatibus quidem ut quam totam numquam voluptatem accusamus reprehenderit omnis deleniti eos. Voluptas, repudiandae. Temporibus fugit necessitatibus quaerat? Accusantium suscipit eaque distinctio enim id. Nulla odio numquam quo vero dolore! Culpa laboriosam provident atque, laborum ad aliquid architecto quo deserunt odit voluptates accusamus, non expedita rem distinctio autem ab, cupiditate in? Quidem eaque sapiente impedit esse aspernatur, vero dolores temporibus rem accusamus voluptatem! Officia consectetur cumque nulla corrupti eum nesciunt explicabo, omnis tenetur eligendi delectus natus, possimus quisquam quibusdam odio dolorem non veritatis eaque doloribus debitis accusantium exercitationem neque recusandae. Vero recusandae non a voluptates quisquam eos fugit cupiditate. In ab incidunt, provident neque rerum, mollitia iure recusandae magni porro, ullam iusto. Molestias voluptates corporis veritatis, corrupti adipisci autem, vel nisi maiores cumque omnis, excepturi officiis. Vero fugit ducimus placeat, a saepe veniam libero eligendi inventore quam illum maiores deserunt earum itaque similique distinctio autem neque, et iste voluptatibus. Repellat accusamus aut, maxime obcaecati consequatur ullam alias vel cupiditate, sapiente dolorem distinctio quibusdam, enim eveniet illum nemo! Consequuntur ratione commodi assumenda adipisci ipsa. Iure ipsum aliquid voluptatum nesciunt magnam temporibus magni libero distinctio. Distinctio iste et veritatis aliquid voluptate, cum modi non incidunt vero voluptas placeat, rem nostrum ducimus dolorem blanditiis nisi deleniti deserunt commodi harum aspernatur culpa quis cumque. In earum quam non perspiciatis id fuga reprehenderit, quod nihil tempore maiores reiciendis, molestias at labore voluptatibus. Eum minus a cum facilis nam sit, rerum natus ipsum libero praesentium, totam nesciunt quae in quaerat at voluptatibus sed ad! Veniam exercitationem repudiandae totam maiores illum officiis repellendus debitis ex quidem, quis, ipsum eaque unde nemo nostrum corporis quo amet eveniet nihil nisi commodi? Similique cupiditate reiciendis voluptates nemo magnam minima inventore culpa quo! Enim esse ea dolores officiis excepturi assumenda magnam ratione dolorem! Culpa dignissimos vero ex expedita enim quisquam dicta a? Deleniti recusandae ad ex tempore nulla autem cum assumenda corrupti commodi et, eos placeat, necessitatibus corporis. Iste quaerat animi non, doloribus tempore commodi molestias nostrum ratione error, labore inventore, mollitia adipisci eum explicabo! Architecto minima nobis quos cupiditate.
+
+
+
+
+	<script type="text/javascript">
+		var map;
+	
+		DG.then(function() {
+					// загрузка кода модуля
+					return DG.plugin('https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js');
+				}).then(function() {
+			
+			map = DG.map('map', {
+				center: [43.241025, 76.957485],
+				zoom: 13
+			});
+	
+			DG.control.location({position: 'bottomright'}).addTo(map);
+			DG.control.scale().addTo(map);
+			DG.control.ruler({position: 'bottomleft'}).addTo(map);
+			DG.control.traffic().addTo(map);
+	
+			your_locationIcon = DG.icon({
+						iconUrl: '{% static "img/your_location.png" %}',
+						iconSize: [24, 24]
+			});
+	
+			catec_collegeIcon = DG.icon({
+						iconUrl: '{% static "img/catecCollege.png" %}',
+						iconSize: [48, 24]
+			});
+			
+			benchIcon = DG.icon({
+				iconUrl: '{% static "img/bench.png" %}',
+				iconSize: [24, 24]
+			});
+
+			{% for bench in benches %}
+
+				DG.marker(['{{ bench.location_latitude }}'.replace(',', '.'), '{{ bench.location_longitude }}'.replace(',', '.')], {
+					icon: benchIcon
+				}).addTo(map).bindPopup(
+				'<p>Скамейка {{ bench.id }} <br/> Рейтинг: {{ bench.rating }} </p> <img class="h-36" src="{{ bench.get_avatar_url }}" alt="">!');
+
+			{% endfor %}
+
+	
+
+
+	
+			DG.marker([43.241025, 76.957485], {
+				icon: catec_collegeIcon
+			}).addTo(map).bindPopup('Центральноазиатский технико-экономический колледж');
+	
+			map.locate({setView: true, watch: true})
+						.on('locationfound', function(e) {
+	
+	
+							DG.marker([e.latitude, e.longitude], {
+								icon: your_locationIcon
+							})
+							.addTo(map)
+							.bindLabel('Я обычная подсказка!')
+							.bindPopup(
+								'<p>Привет мир!<br />Это попап.</p>     <img class="your_location" src="./your_location.png" alt="">');
+						})
+						.on('locationerror', function(e) {
+							DG.popup()
+							  .setLatLng(map.getCenter())
+							  .setContent('Доступ к определению местоположения отключён')
+							  .openOn(map);
+						});
+		
+			var markers = DG.markerClusterGroup();
+	
+					// обработка координат для установки маркеров
+					for (var i = 0; i < addressPoints.length; i++) {
+						var a = addressPoints[i];
+						var title = a[2];
+						var marker = DG.marker([a[0], a[1]], { title: title });
+						marker.bindPopup(title);
+						markers.addLayer(marker);
+					}
+	
+					map.addLayer(markers);
+			
+			
+		});
+	</script>
+
+
+
 </body>
 
 
