@@ -14,6 +14,3 @@ class BenchImageForm(forms.ModelForm):
     class Meta:
         model = BenchImage
         fields = ['image']
-        widgets = {
-            'image': forms.ClearableFileInput(attrs={'multiple': True}),
-        }
