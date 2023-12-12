@@ -13,22 +13,25 @@
     {% endblock %}
     {% block title %}register{% endblock %}
 </head>
-<body>
-    <div class="register">
-        {% include 'mySite/base.html' %} 
-        <div class="container">
-            <div class="register-container">
-                {% block content %}
-                <h2>{% trans 'Регистрация' %}</h2>
-                    <form class="register__form" method="post">
+{% block content %}
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 text-xl mt-10">
+
+                <h2 class="text-2xl mb-4">Регистрация</h2>
+                <form class="register__form " method="post">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button type="submit">{% trans 'Зарегистрироваться' %}</button>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white text-xl font-bold py-2 px-4 rounded mt-4">
+                        Зарегестрироваться
+                    </button>
+                    <br>
+                    есть аккаунт? 
+                    <a href="{% url 'login' %}" class="underline">Войдите</a>
                 </form>
-                {% endblock %}
-            </div>
 
         </div>
-    </div>
+
 </body>
+{% endblock %}
 </html>

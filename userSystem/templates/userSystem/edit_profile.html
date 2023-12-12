@@ -14,41 +14,35 @@
     {% block title %}edit profile{% endblock %}
 </head>
 <body>
-    <div class="profile">
-        {% include 'mySite/base.html' %} 
-        <div class="container">
-            <div class="profile-container">
-                {% block content %}
-                    <h1>Редактирование профиля</h1>
-                    <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
-
-                    <form method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <label for="id_name">Имя:</label>
-                        <input type="text" id="id_name" name="name" value="{{ profile.name }}">
-                        <br>
-                        <label for="id_surname">Фамилия:</label>
-                        <input type="text" id="id_surname" name="surname" value="{{ profile.surname }}">
-                        <br>
-                        <label for="id_bio">Биография:</label>
-                        <textarea id="id_bio" name="bio">{{ profile.bio }}</textarea>
-                        <br>
-                        <label for="id_avatar">Аватар:</label>
-                        <img src="{{ profile.get_avatar_url }}" alt="Аватар пользователя">
-                        <input type="file" id="id_avatar" name="avatar">
-                        <br>
-                        <label for="delete_avatar">Удалить фото:</label>
-                        <input type="checkbox" id="delete_avatar" name="delete_avatar" value="true">
-
-                        <br>
-                        <input type="submit" value="Сохранить">
-                    </form>
-
-                    <a href="{% url 'view_profile' %}">Вернуться</a>
-                {% endblock %}
-            </div>
-
-        </div>
+    {% block content %}
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Редактирование профиля</h1>
+        <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+    
+        <form method="post" enctype="multipart/form-data" class="mt-4">
+            {% csrf_token %}
+            <label for="id_name" class="block">Имя:</label>
+            <input type="text" id="id_name" name="name" value="{{ profile.name }}" class="w-full p-2 border border-gray-300 rounded mb-2">
+            
+            <label for="id_surname" class="block">Фамилия:</label>
+            <input type="text" id="id_surname" name="surname" value="{{ profile.surname }}" class="w-full p-2 border border-gray-300 rounded mb-2">
+            
+            <label for="id_bio" class="block">Биография:</label>
+            <textarea id="id_bio" name="bio" class="w-full p-2 border border-gray-300 rounded mb-2">{{ profile.bio }}</textarea>
+            
+            <label for="id_avatar" class="block">Аватар:</label>
+            <img src="{{ profile.get_avatar_url }}" alt="Аватар пользователя" class="w-16 h-16 rounded-full mb-2">
+            <input type="file" id="id_avatar" name="avatar" class="mb-2">
+            
+            <label for="delete_avatar" class="block">Удалить фото:</label>
+            <input type="checkbox" id="delete_avatar" name="delete_avatar" value="true" class="mb-2">
+    
+            <input type="submit" value="Сохранить" class="bg-blue-500 text-white p-2 rounded cursor-pointer">
+        </form>
+    
+        <a href="{% url 'view_profile' %}" class="text-blue-500 hover:underline mt-2">Вернуться</a>
     </div>
+    {% endblock %}
+
 </body>
 </html>
