@@ -6,6 +6,7 @@ from benches.models import Bench, BenchDistrict, BenchType
 from .forms import BenchForm, BenchImageForm
 
 def create_bench(request):
+    benches = Bench.objects.all()
     if request.method == 'POST':
         bench_form = BenchForm(request.POST, request.FILES)
         image_form = BenchImageForm(request.POST, request.FILES)
@@ -24,7 +25,7 @@ def create_bench(request):
         bench_form = BenchForm()
         image_form = BenchImageForm()
 
-    return render(request, 'benches/create_bench.html', {'bench_form': bench_form, 'image_form': image_form})
+    return render(request, 'benches/create_bench.html', {'benches': benches, 'bench_form': bench_form, 'image_form': image_form})
 
 def bench_count():
     benches = Bench.objects.all()

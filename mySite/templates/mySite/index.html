@@ -15,7 +15,7 @@
 		<div id="map" style="margin-left: 0px; width: 100vw;; height:86.5vh"></div>
 
 	</div>
-	
+
 	<script type="text/javascript">
 		var map;
 	
@@ -27,6 +27,10 @@
 			map = DG.map('map', {
 				center: [43.241025, 76.957485],
 				zoom: 13
+			});
+			map.on('click', (e) => {
+                const coords = e.latlng;
+				console.log(coords);
 			});
 	
 			DG.control.location({position: 'bottomright'}).addTo(map);
@@ -43,7 +47,7 @@
 						iconUrl: '{% static "img/catecCollege.png" %}',
 						iconSize: [48, 24]
 			});
-			
+
 			benchIcon = DG.icon({
 				iconUrl: '{% static "img/bench.png" %}',
 				iconSize: [24, 24]
@@ -51,10 +55,47 @@
 
 			{% for bench in benches %}
 				var popup = `
-				<div class="w-28 h-48">
-					<p>Скамейка {{ bench.id }}</p> 
+				<div class="w-28 h-60">
+					<a href="" class="flex items-center underline">
+						<p class="text-sm text-white">Скамейка &nbsp;<p class="text-lg text-white">{{ bench.id }}</p></p>
+					</a>
+					<p>
+						Спинка:&nbsp;&nbsp;
+						{% if bench.has_backrest %}
+							✅
+						{% elif bench.has_backrest %}
+							❌
+						{% else %}
+							❔
+						{% endif %}
+					</p> 
+					<p>
+						Урна:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						{% if bench.has_bin %}
+							✅
+						{% elif bench.has_bin %}
+							❌
+						{% else %}
+							❔
+						{% endif %}
+					</p> 
+
 					<br/>
-					<p>Рейтинг: {{ bench.rating }}</p>
+					<p>{{ bench.type.name }}</p>
+					<p>{{ bench.district.name }}</p>
+					<p>{{ bench.environment.name }}</p>
+
+					<p>
+						{% if bench.rating == 0 %}
+						Нет оценок
+						<br/>
+						{% else %}
+							{% for i in "0123456789"|slice:bench.get_rating %}
+								⭐
+							{% endfor %}</p>
+						{% endif %}
+						<br/>
+
 					<a href="">
 						<img class="w-28 h-16" src="{{ bench.get_avatar_url }}" alt="Фото скамейки">
 					</a>
