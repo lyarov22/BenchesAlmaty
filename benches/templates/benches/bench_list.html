@@ -104,7 +104,17 @@
         </p>
   
         <p class="lowercase">
-          <a class="underline" href="#">{% trans 'Показать на карте' %}</a>,
+          <a class="underline" href="/" id="showOnMap">{% trans 'Показать на карте' %}</a>,
+          
+          <script>
+            document.getElementById('showOnMap').addEventListener('click', function() {
+                // Сохраняем какие-либо данные, которые нужны на другой странице
+                localStorage.setItem('isShow', 1);
+                localStorage.setItem('benchLat', '{{ bench.location_latitude }}');
+                localStorage.setItem('benchLon', '{{ bench.location_longitude }}');
+            });
+        </script>
+          
           {{ bench.district.name }},
           {{ bench.environment.name }}
   
