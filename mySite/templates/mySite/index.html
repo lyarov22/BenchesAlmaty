@@ -14,10 +14,11 @@
 	<div class="container width: 100vw; -mt-3.5 -ml-10">
 
 		<div id="map" style="margin-left: 0px; width: 100vw;; height:86.5vh"></div>
-
+		
 	</div>
 
 	<script type="text/javascript">
+		
 		var map;
 	
 		DG.then(function() {
@@ -27,8 +28,27 @@
 			
 			map = DG.map('map', {
 				center: [43.241025, 76.957485],
-				zoom: 13
+				zoom: 15
 			});
+
+				console.log('Страница загружена!');
+
+					if (localStorage.getItem('isShow') == 1){
+						localStorage.setItem('isShow', 0);
+						var show_location_latitude = localStorage.getItem('benchLat');
+						var show_location_longitude = localStorage.getItem('benchLon');
+						
+						console.log(show_location_latitude.replace(',', '.'));
+						console.log(show_location_longitude);
+
+						map.setView([show_location_latitude.replace(',', '.'), show_location_longitude.replace(',', '.')]);
+						
+					}
+
+
+				
+	
+
 	
 			DG.control.location({position: 'bottomright'}).addTo(map);
 			DG.control.scale().addTo(map);
@@ -54,7 +74,7 @@
 
 			{% for bench in benches %}
 				var popup = `
-				<div id="#bench-{{ bench.id }}" class="w-28 h-60">
+				<div id="bench-{{ bench.id }}" class="w-28 h-60">
 					<a href="" class="flex items-center underline">
 						<p class="text-sm text-white">Скамейка &nbsp;<p class="text-lg text-white">{{ bench.id }}</p></p>
 					</a>
@@ -116,7 +136,7 @@
 				icon: catec_collegeIcon
 			}).addTo(map).bindPopup('Центральноазиатский технико-экономический колледж');
 	
-			map.locate({setView: true, watch: true})
+			map.locate({ watch: true})
 						.on('locationfound', function(e) {
 	
 	
@@ -135,8 +155,14 @@
 							  .openOn(map);
 						});
 
-						map.addLayer(markers);
 			
+			
+			
+			
+
+			map.addLayer(markers);
+
+
 		});
 	</script>
 

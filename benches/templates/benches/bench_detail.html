@@ -53,7 +53,17 @@
       </div>
       <div class="flex flex-col">
         <br>
-        <a class="text-lg underline underline-offset-4" href="">Показать на карте</a>
+        <a class="text-lg underline underline-offset-4" href="/" id="showOnMap">Показать на карте</a>
+
+        <script>
+          document.getElementById('showOnMap').addEventListener('click', function() {
+              // Сохраняем какие-либо данные, которые нужны на другой странице
+              localStorage.setItem('isShow', 1);
+              localStorage.setItem('benchLat', '{{ bench.location_latitude }}');
+              localStorage.setItem('benchLon', '{{ bench.location_longitude }}');
+          });
+      </script>
+
         <br>
         <a class="text-lg underline underline-offset-4" href="">Построить маршрут</a>
         <br>
