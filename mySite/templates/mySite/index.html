@@ -10,17 +10,12 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
 
-	<div class="container mx-auto">
+	<div class="container width: 100vw; -mt-3.5 -ml-10">
 
-		<div id="map" style="width:100vh; height:100vh"></div>
-		<p>Скаймейка 1234 <br>
-		</p>
+		<div id="map" style="margin-left: 0px; width: 100vw;; height:86.5vh"></div>
 
 	</div>
-
-
-
-
+	
 	<script type="text/javascript">
 		var map;
 	
@@ -55,18 +50,24 @@
 			});
 
 			{% for bench in benches %}
+				var popup = `
+				<div class="w-28 h-48">
+					<p>Скамейка {{ bench.id }}</p> 
+					<br/>
+					<p>Рейтинг: {{ bench.rating }}</p>
+					<a href="">
+						<img class="w-28 h-16" src="{{ bench.get_avatar_url }}" alt="Фото скамейки">
+					</a>
+					
+					<br/>
+				</div>`;
 
 				DG.marker(['{{ bench.location_latitude }}'.replace(',', '.'), '{{ bench.location_longitude }}'.replace(',', '.')], {
 					icon: benchIcon
-				}).addTo(map).bindPopup(
-				'<p>Скамейка {{ bench.id }} <br/> Рейтинг: {{ bench.rating }} </p> <img class="h-36" src="{{ bench.get_avatar_url }}" alt="">!');
+				}).addTo(map).bindPopup(popup);
 
 			{% endfor %}
 
-	
-
-
-	
 			DG.marker([43.241025, 76.957485], {
 				icon: catec_collegeIcon
 			}).addTo(map).bindPopup('Центральноазиатский технико-экономический колледж');
@@ -79,9 +80,9 @@
 								icon: your_locationIcon
 							})
 							.addTo(map)
-							.bindLabel('Я обычная подсказка!')
+							.bindLabel('Ваше местоположение!')
 							.bindPopup(
-								'<p>Привет мир!<br />Это попап.</p>     <img class="your_location" src="./your_location.png" alt="">');
+								'<p>Вы находитесь здесь.');
 						})
 						.on('locationerror', function(e) {
 							DG.popup()
@@ -89,20 +90,6 @@
 							  .setContent('Доступ к определению местоположения отключён')
 							  .openOn(map);
 						});
-		
-			var markers = DG.markerClusterGroup();
-	
-					// обработка координат для установки маркеров
-					for (var i = 0; i < addressPoints.length; i++) {
-						var a = addressPoints[i];
-						var title = a[2];
-						var marker = DG.marker([a[0], a[1]], { title: title });
-						marker.bindPopup(title);
-						markers.addLayer(marker);
-					}
-	
-					map.addLayer(markers);
-			
 			
 		});
 	</script>
