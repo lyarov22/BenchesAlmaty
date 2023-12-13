@@ -95,7 +95,7 @@
       {% for bench in benches %}
       <div class="bg-white p-6 rounded-lg shadow-md">
 
-        <h3 class="text-xl">Скамейка {{ bench.id }}</h3>
+        <a href="{% url 'benches:bench_detail' bench.id %}" class="text-xl">Скамейка {{ bench.id }}</a>
         <p>Rating: {{ bench.rating }}</p>
         <p>
           {% for i in "0123456789"|slice:bench.get_rating %}

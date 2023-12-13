@@ -9,6 +9,7 @@
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+	<script src="https://maps.api.2gis.ru/2.0/cluster_realworld.js"></script>
 
 	<div class="container width: 100vw; -mt-3.5 -ml-10">
 
@@ -27,10 +28,6 @@
 			map = DG.map('map', {
 				center: [43.241025, 76.957485],
 				zoom: 13
-			});
-			map.on('click', (e) => {
-                const coords = e.latlng;
-				console.log(coords);
 			});
 	
 			DG.control.location({position: 'bottomright'}).addTo(map);
@@ -53,9 +50,11 @@
 				iconSize: [24, 24]
 			});
 
+			var markers = DG.markerClusterGroup();
+
 			{% for bench in benches %}
 				var popup = `
-				<div class="w-28 h-60">
+				<div id="#bench-{{ bench.id }}" class="w-28 h-60">
 					<a href="" class="flex items-center underline">
 						<p class="text-sm text-white">Скамейка &nbsp;<p class="text-lg text-white">{{ bench.id }}</p></p>
 					</a>
@@ -103,9 +102,13 @@
 					<br/>
 				</div>`;
 
-				DG.marker(['{{ bench.location_latitude }}'.replace(',', '.'), '{{ bench.location_longitude }}'.replace(',', '.')], {
+				var marker = DG.marker(['{{ bench.location_latitude }}'.replace(',', '.'), '{{ bench.location_longitude }}'.replace(',', '.')], {
 					icon: benchIcon
-				}).addTo(map).bindPopup(popup);
+				})
+				.addTo(map)
+				.bindPopup(popup);
+
+				markers.addLayer(marker);
 
 			{% endfor %}
 
@@ -131,6 +134,8 @@
 							  .setContent('Доступ к определению местоположения отключён')
 							  .openOn(map);
 						});
+
+						map.addLayer(markers);
 			
 		});
 	</script>

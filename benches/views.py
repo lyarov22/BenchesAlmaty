@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 
 from django.db.models import Count
 
@@ -73,4 +73,8 @@ def bench_list(request):
         'hasBackrestAll': bench_count().filter(has_backrest=True).count,
         'hasBinAll': bench_count().filter(has_bin=True).count,
         })
-    
+
+
+def bench_detail(request, bench_id):
+    bench = get_object_or_404(Bench, id=bench_id)
+    return render(request, 'benches/bench_detail.html', {'bench': bench})
