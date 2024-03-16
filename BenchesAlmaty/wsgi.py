@@ -12,5 +12,8 @@ application.add_files(os.path.join('media'), prefix='media/')  # Если у в�
 
 # Enable insecure serving of static files when DEBUG is True
 if settings.DEBUG:
-    from django.contrib.staticfiles.handlers import StaticFilesHandler
-    application = StaticFilesHandler(application)
+    # from django.contrib.staticfiles.handlers import StaticFilesHandler
+    # application = StaticFilesHandler(application)
+
+    STATIC_ROOT = os.path.join(settings.BASE_DIR, 'staticfiles')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
