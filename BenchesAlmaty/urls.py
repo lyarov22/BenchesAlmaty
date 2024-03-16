@@ -30,7 +30,6 @@ urlpatterns = [
     # bench system
     path('benches/', include('benches.urls')),
 
-    path("__reload__/", include("django_browser_reload.urls")),
 ]
 
 if settings.DEBUG:
