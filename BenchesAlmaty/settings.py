@@ -46,8 +46,6 @@ INSTALLED_APPS = [
     'mySite', # app name
     'userSystem', # login system
     'benches',
-
-    'django_browser_reload',
     
 ]
 
