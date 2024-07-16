@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # 'livereload', # pip install django-livereload-server
+    'livereload', # pip install django-livereload-server
 
     'rosetta',
     'tailwind',
