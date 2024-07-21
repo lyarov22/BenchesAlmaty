@@ -1,10 +1,10 @@
 {% extends "mySite/base.html" %}
-
-{% block title %}Подробная информация о скамейке №{{ bench.id }}{% endblock %}
+{% load static tailwind_tags i18n %}
+{% block title %} №{{ bench.id }}{% endblock %}
 
 {% block content %}
   <div class="container mx-auto mt-8 p-8 bg-white rounded-lg shadow-md">
-    <h2 class="text-3xl font-bold mb-4">Подробная информация о скамейке №{{ bench.id }}</h2>
+    <h2 class="text-3xl font-bold mb-4">№{{ bench.id }}</h2>
     
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       <div>
@@ -12,19 +12,19 @@
       </div>
       
       <div>
-        <p class="text-lg font-bold">Рейтинг:</p>
+        <p class="text-lg font-bold">{% trans 'Состояние' %}</p>
         <div class="flex">
           {% for i in "0123456789"|slice:bench.get_rating %}
             ⭐
           {% endfor %}
         </div>
 
-        <p class="text-lg font-bold mt-4">Координаты:</p>
-        <p>Широта: {{ bench.location_latitude }}</p>
-        <p>Долгота: {{ bench.location_longitude }}</p>
+        <p class="text-lg font-bold mt-4">{% trans 'Координаты' %}:</p>
+        <p>{% trans 'Широта' %}: {{ bench.location_latitude|floatformat:6 }}</p>
+        <p>{% trans 'Долгота' %}: {{ bench.location_longitude|floatformat:6 }}</p>
         <br>
 
-        <p class="text-lg font-bold mt-4">Дополнительная информация:</p>
+        <p class="text-lg font-bold mt-4">{% trans 'Дополнительная информация' %}:</p>
         <p>
             Спинка:&nbsp;&nbsp;
             {% if bench.has_backrest %}
@@ -45,15 +45,15 @@
                 ❔
             {% endif %}
         </p>
-        <p>Дата создания: {{ bench.created_date }}</p>
-        <p>Автор: {{ bench.author.username }}</p>
-        <p>Тип: {{ bench.type.name }}</p>
-        <p>Район: {{ bench.district.name }}</p>
-        <p>Окружение: {{ bench.environment.name }}</p>
+        <p>{% trans 'Дата создания' %}: {{ bench.created_date }}</p>
+        <p>{% trans 'Автор' %}: {{ bench.author.username }}</p>
+        <p>{% trans 'Тип' %}: {{ bench.type.name }}</p>
+        <p>{% trans 'Район' %}: {{ bench.district.name }}</p>
+        <p>{% trans 'Окружение' %}: {{ bench.environment.name }}</p>
       </div>
       <div class="flex flex-col">
         <br>
-        <a class="text-lg underline underline-offset-4" href="/" id="showOnMap">Показать на карте</a>
+        <a class="text-lg underline underline-offset-4" href="/" id="showOnMap">{% trans 'Показать на карте' %}</a>
 
         <script>
           document.getElementById('showOnMap').addEventListener('click', function() {
@@ -65,17 +65,18 @@
       </script>
 
         <br>
-        <a class="text-lg underline underline-offset-4" href="">Построить маршрут</a>
+        <a class="text-lg underline underline-offset-4" href="https://yandex.kz/maps/ru/162/almaty/?ll={{ bench.location_longitude|floatformat:6 }}%2C{{ bench.location_latitude|floatformat:6 }}
+        &mode=routes&rtext=~{{ bench.location_latitude|floatformat:6 }}%2C{{ bench.location_longitude|floatformat:6 }}&rtt=pd&ruri=~&z=18.08">{% trans 'Открыть в Яндекс Карта' %}х</a>
         <br>
-        <a class="text-lg underline underline-offset-4" href="">Посмотреть отзывы</a>
+        <a class="text-lg underline underline-offset-4" href="">{% trans 'Редактировать' %}</a>
         <br>
-        <a class="text-lg underline underline-offset-4" href="">Редактировать</a>
+        <a class="text-lg underline underline-offset-4" href="">{% trans 'Поделиться' %}</a>
         
       </div>
       
       <div class="col-span-3">
         
-        <p class="text-lg font-bold">Описание:</p>
+        <p class="text-lg font-bold">{% trans 'Координаты' %}Описание:</p>
         <p>{{ bench.deskription }}</p>
       </div>
     </div>

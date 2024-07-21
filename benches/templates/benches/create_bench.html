@@ -2,7 +2,7 @@
 
 {% load static tailwind_tags i18n %}
 
-{% block title %}Создать скамейку{% endblock %}
+{% block title %}{% trans 'Создать скамейку' %}{% endblock %}
 
 {% block content %}
 <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full&skin=dark"></script>
@@ -16,7 +16,7 @@
 </div>
 
 <div class="container mx-auto my-10">
-    <h1 class="text-3xl font-bold mb-6">Создать скамейку</h1>
+    <h1 class="text-3xl font-bold mb-6">{% trans 'Создать скамейку' %}</h1>
 
     <script type="text/javascript">
 
@@ -122,62 +122,62 @@
 
         <div class="mb-4 flex flex-row">
             <div class="mr-3">
-              <label for="id_location_latitude" class="block text-gray-700 text-sm font-bold mb-2">Широта</label>
+              <label for="id_location_latitude" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Широта' %}</label>
               <input type="number" name="location_latitude" step="any" required="" id="id_location_latitude" readonly>
             </div>
             <div>
-              <label for="id_location_longitude" class="block text-gray-700 text-sm font-bold mb-2">Долгота</label>
+              <label for="id_location_longitude" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Долгота' %}</label>
               <input type="number" name="location_longitude" step="any" required="" id="id_location_longitude" readonly>
             </div>
         </div>
 
         <div class="mb-4">
-            <label for="id_avatar" class="block text-gray-700 text-sm font-bold mb-2">Avatar</label>
+            <label for="id_avatar" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Главное фото' %}</label>
             {{ bench_form.avatar }}
         </div>
 
         <div class="mb-4">
-            <label for="id_rating" class="block text-gray-700 text-sm font-bold mb-2">Rating</label>
+            <label for="id_rating" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Состояние' %}</label>
             {{ bench_form.rating }}
         </div>
 
         <div class="mb-4">
-            <label for="id_has_backrest" class="block text-gray-700 text-sm font-bold mb-2">Has Backrest</label>
+            <label for="id_has_backrest" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Есть спинка?' %}</label>
             {{ bench_form.has_backrest }}
         </div>
 
         <div class="mb-4">
-            <label for="id_has_bin" class="block text-gray-700 text-sm font-bold mb-2">Has Bin</label>
+            <label for="id_has_bin" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Есть мусорка?' %}</label>
             {{ bench_form.has_bin }}
         </div>
 
         <div class="mb-4">
-            <label for="id_deskription" class="block text-gray-700 text-sm font-bold mb-2">Description</label>
+            <label for="id_deskription" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Описание' %}</label>
             {{ bench_form.deskription }}
         </div>
 
         <div class="mb-4">
-            <label for="id_type" class="block text-gray-700 text-sm font-bold mb-2">Type</label>
+            <label for="id_type" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Тип' %}</label>
             {{ bench_form.type }}
         </div>
 
         <div class="mb-4">
-            <label for="id_district" class="block text-gray-700 text-sm font-bold mb-2">District</label>
+            <label for="id_district" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Район' %}</label>
             {{ bench_form.district }}
         </div>
 
         <div class="mb-4">
-            <label for="id_environment" class="block text-gray-700 text-sm font-bold mb-2">Environment</label>
+            <label for="id_environment" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Окружение' %}</label>
             {{ bench_form.environment }}
         </div>
 
         <div class="mb-4">
-            <label for="id_image" class="block text-gray-700 text-sm font-bold mb-2">Image</label>
+            <label for="id_image" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Фото' %}</label>
             {{ image_form.image }}
         </div>
 
         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Create Bench
+          {% trans 'Добавить скамейку' %}
         </button>
     </form>
 
