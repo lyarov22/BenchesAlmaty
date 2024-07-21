@@ -22,17 +22,6 @@
         {% block content %}{% endblock %}
     </div>
     
-    <form id="language-form" action="{% url 'set_language' %}" method="post">
-        {% csrf_token %}
-        <select name="language" style="display: none;">
-            {% get_available_languages as LANGUAGES %}
-            {% get_language_info_list for LANGUAGES as languages %}
-            {% for language in languages %}
-                <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
-                    {{ language.name_local }} ({{ language.code }})
-                </option>
-            {% endfor %}
-        </select>
-    </form>
+
 </body>
 </html>

@@ -25,16 +25,18 @@
         <div class="w-full flex-grow lg:items-center lg:w-auto hidden lg:block pt-6 lg:pt-0 " id="nav-content">
 
             <ul class="list-reset lg:flex justify-end flex-1 items-center text-xl">
-                <a href="{% url 'set_language' %}" 
-                    class="mr-3 focus:outline-none text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal leading-3 shadow-md rounded active:bg-green-500 {% if LANGUAGE_CODE == 'ru' %}bg-green-500{% endif %}" 
-                    onclick="event.preventDefault(); document.getElementById('language-form').language.value = 'ru'; document.getElementById('language-form').submit();">
-                    Рус
-                </a>
-                <a href="{% url 'set_language' %}" 
-                    class="mr-5 focus:outline-none text-gray-600 border border-white bg-gray-50 cursor-pointer px-3 py-2.5 font-normal leading-3 shadow-md rounded active:bg-green-500 {% if LANGUAGE_CODE == 'kk' %}bg-green-500{% endif %}" 
-                    onclick="event.preventDefault(); document.getElementById('language-form').language.value = 'kk'; document.getElementById('language-form').submit();">
-                    Қаз
-                </a>
+              <form id="language-form" action="{% url 'set_language' %}" method="post" class="">
+                {% csrf_token %}
+                <select name="language" onchange="this.form.submit()" class="appearance-auto bg-none rounded-xl text-base px-2 py-1 inline-flex focus:ring-0 focus:outline-none focus:ring-transparent mr-4">
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                        <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %}selected{% endif %} class="justify-center">
+                            {{ language.name_local }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
 
                 <li class="mr-3">
                     <a class="hover:text-green-500" href="{% url 'benches:bench_list' %}">{% trans 'Список скамеек' %}</a>
