@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+
 from .models import CustomUser, Profile
+
 
 # login system
 class RegistrationForm(UserCreationForm):
@@ -8,10 +10,12 @@ class RegistrationForm(UserCreationForm):
         model = CustomUser
         fields = ('username', 'email', 'password1', 'password2')  # Поля, которые будут отображаться на форме
 
+
 class LoginForm(AuthenticationForm):
-    # Вы можете добавить дополнительные поля, если необходимо
     class Meta:
         model = CustomUser
+        fields = '__all__'  # Указываем все поля модели, если необходимо
+
 
 # profile system
 class ProfileForm(forms.ModelForm):

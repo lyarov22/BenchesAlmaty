@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('has_backrest', models.BooleanField(blank=True, default=None, null=True)),
                 ('has_bin', models.BooleanField(blank=True, default=None, null=True)),
                 ('created_date', models.DateTimeField(auto_now_add=True, verbose_name='Дата публикации')),
-                ('deskription', models.TextField(blank=True)),
+                ('description', models.TextField(blank=True)),
                 ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Автор')),
             ],
             options={

@@ -1,5 +1,5 @@
 """
-ASGI config for BenchesAlmaty project.
+ASGI config for benches_almaty project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'BenchesAlmaty.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'benches_almaty.settings')
 
 application = get_asgi_application()

@@ -4,8 +4,8 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 
 from .models import CustomUser, Profile
-
 from .forms import RegistrationForm, LoginForm, ProfileForm
+
 
 # login system
 def register(request):
@@ -19,6 +19,7 @@ def register(request):
         form = RegistrationForm()
     return render(request, 'userSystem/register.html', {'form': form})
 
+
 def user_login(request):
     if request.method == 'POST':
         form = LoginForm(request, request.POST)
@@ -29,10 +30,10 @@ def user_login(request):
             if user is not None:
                 login(request, user)
                 return redirect('mySite:index')
-
     else:
         form = LoginForm()
     return render(request, 'userSystem/login.html', {'form': form})
+
 
 def user_logout(request):
     logout(request)
@@ -46,18 +47,17 @@ def view_profile(request):
     try:
         profile = Profile.objects.get(user=request.user)
     except Profile.DoesNotExist:
-        # Если профиль не существует, создайте его здесь
         profile = Profile(user=request.user)
         profile.save()
-    
+
     return render(request, 'userSystem/view_profile.html', {'profile': profile, 'user_ip': user_ip})
+
 
 @login_required
 def edit_profile(request):
     try:
         profile = Profile.objects.get(user=request.user)
     except Profile.DoesNotExist:
-        # Если профиль не существует, создайте его здесь
         profile = Profile(user=request.user)
         profile.save()
 
@@ -70,11 +70,11 @@ def edit_profile(request):
                 profile.avatar = None
                 profile.save()
             return redirect('view_profile')
-
     else:
         form = ProfileForm(instance=profile)
 
     return render(request, 'userSystem/edit_profile.html', {'form': form, 'profile': profile})
+
 
 def other_user_profile(request, username):
     try:
@@ -82,6 +82,11 @@ def other_user_profile(request, username):
         profile = Profile.objects.get(user=user)
     except Http404:
         error_message = f"Профиль пользователя {username} не найден."
-        return render(request, 'userSystem/other_user_profile.html', {'error_message': error_message}, status=404)
+        return render(
+            request,
+            'userSystem/other_user_profile.html',
+            {'error_message': error_message},
+            status=404
+        )
 
     return render(request, 'userSystem/other_user_profile.html', {'profile': profile})

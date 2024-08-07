@@ -1,0 +1,90 @@
+# Stage 1: Builder
+FROM python:3.11.4-slim-buster as builder
+
+# Установить рабочую директорию
+WORKDIR /usr/src/app
+
+# Установить переменные окружения
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Установить системные зависимости
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    gcc \
+    curl \
+    gnupg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Установить Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g npm@latest
+
+# Линтинг
+RUN pip install --upgrade pip
+RUN pip install flake8==6.0.0
+COPY . /usr/src/app/
+RUN flake8 --ignore=E501,F401 .
+
+# Установить зависимости Python
+COPY ./requirements.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+
+# Установить зависимости Tailwind
+WORKDIR /usr/src/app/mySite/static_src
+RUN npm install
+RUN npx update-browserslist-db@latest
+
+# Собрать Tailwind CSS
+RUN npm run build
+
+# Stage 2: Final
+FROM python:3.11.4-slim-buster
+
+# Создать директории и пользователя
+RUN mkdir -p /home/app && \
+    addgroup --system app && \
+    adduser --system --group app && \
+    mkdir -p /home/app/web /home/app/web/staticfiles /home/app/web/mediafiles
+
+# Установить зависимости
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    netcat \
+    curl \
+    gnupg \
+    && rm -rf /var/lib/apt/lists/*
+
+# Установить Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g npm@latest
+
+# Копировать зависимости Python
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirements.txt .
+RUN pip install --upgrade pip
+RUN pip install --no-cache /wheels/*
+
+# Копировать статические файлы и стили
+COPY --from=builder /usr/src/app/mySite/static_src /home/app/static_src
+WORKDIR /home/app/static_src
+RUN npm install && npm run build
+
+# Копировать entrypoint
+COPY ./entrypoint.prod.sh /home/app/web/entrypoint.prod.sh
+RUN sed -i 's/\r$//g' /home/app/web/entrypoint.prod.sh && \
+    chmod +x /home/app/web/entrypoint.prod.sh
+
+# Копировать проект
+COPY . /home/app/web
+
+# Изменить владельца файлов
+RUN chown -R app:app /home/app
+
+# Переключиться на пользователя app
+USER app
+
+# Запустить entrypoint
+ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]

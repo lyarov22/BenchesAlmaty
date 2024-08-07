@@ -5,11 +5,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from userSystem import views as user_views
-from benches import views as benches_views
 
-app_name = 'mySite'
-
-urlpatterns = [
+allpatterns = [
     path('favicon.ico/', RedirectView.as_view(url='/static/img/reread-logo.ico', permanent=True), name='favicon'),
     path('admin/', admin.site.urls),
     path('rosetta/', include('rosetta.urls')),
@@ -24,12 +21,14 @@ urlpatterns = [
     # profile system
     path('profile/', user_views.view_profile, name='view_profile'),
     path('profile/edit/', user_views.edit_profile, name='edit_profile'),
-
     path('profile/<str:username>/', user_views.other_user_profile, name='other_user_profile'),
 
     # bench system
     path('benches/', include('benches.urls')),
+]
 
+urlpatterns = [
+    path('benches_site/', include((allpatterns, 'allpatterns'))),
 ]
 
 if settings.DEBUG:
