@@ -26,25 +26,30 @@
 					return DG.plugin('https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js');
 				}).then(function() {
 			
-			map = DG.map('map', {
-				center: [43.241025, 76.957485],
-				zoom: 15
-			});
+				var urlParams = new URLSearchParams(window.location.search);
+				var lat = urlParams.get("lat");
+				var lon = urlParams.get("lon");
 
-				console.log('Страница загружена!');
 
-					if (localStorage.getItem('isShow') == 1){
-						localStorage.setItem('isShow', 0);
-						var show_location_latitude = localStorage.getItem('benchLat');
-						var show_location_longitude = localStorage.getItem('benchLon');
-						
-						console.log(show_location_latitude.replace(',', '.'));
-						console.log(show_location_longitude);
+				if (lat && lon) {
+					lat = lat.replace(",", ".");  // Меняем запятую на точку
+					lon = lon.replace(",", ".");  // Меняем запятую на точку
+					lat = parseFloat(lat);
+					lon = parseFloat(lon);
 
-						map.setView([show_location_latitude.replace(',', '.'), show_location_longitude.replace(',', '.')]);
-						
+					if (!isNaN(lat) && !isNaN(lon)) {
+						map = DG.map('map', {
+						center: [lat, lon],
+						zoom: 20
+					});
 					}
-					
+				}
+				else(
+					map = DG.map('map', {
+						center: [43.241025, 76.957485],
+						zoom: 15
+					})
+				)
 			DG.control.location({position: 'bottomright'}).addTo(map);
 			DG.control.scale().addTo(map);
 			DG.control.ruler({position: 'bottomleft'}).addTo(map);
@@ -159,6 +164,23 @@
 
 
 		});
+
+		document.addEventListener("DOMContentLoaded", function () {
+				var urlParams = new URLSearchParams(window.location.search);
+				var lat = urlParams.get("lat");
+				var lon = urlParams.get("lon");
+
+				if (lat && lon) {
+					lat = parseFloat(lat);
+					lon = parseFloat(lon);
+					if (!isNaN(lat) && !isNaN(lon)) {
+						map = DG.map('map', {
+						center: [lat, lon],
+						zoom: 15
+					});
+					}
+				}
+			});
 	</script>
 
 

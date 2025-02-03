@@ -1,84 +1,90 @@
 {% extends "mySite/base.html" %}
 {% load static tailwind_tags i18n %}
-{% block title %} №{{ bench.id }}{% endblock %}
+
+{% block title %}№{{ bench.id }}{% endblock %}
 
 {% block content %}
-  <div class="container mx-auto mt-8 p-8 bg-white rounded-lg shadow-md">
-    <h2 class="text-3xl font-bold mb-4">№{{ bench.id }}</h2>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div>
-        <img src="{{ bench.get_avatar_url }}" alt="" class="mb-4 rounded-lg">
-      </div>
-      
-      <div>
-        <p class="text-lg font-bold">{% trans 'Состояние' %}</p>
-        <div class="flex">
-          {% for i in "0123456789"|slice:bench.get_rating %}
-            ⭐
-          {% endfor %}
+<body class="bg-green-50 min-h-screen p-6">
+    <div class="container mx-auto bg-white shadow-lg rounded-lg p-8">
+        <!-- Заголовок -->
+        <h2 class="text-3xl font-bold text-green-700 mb-6 text-center">№{{ bench.id }}</h2>
+
+        <!-- Основной контент -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Фото -->
+            <div class="flex justify-center">
+                <img src="{{ bench.get_avatar_url }}" alt="Фото скамейки" class="rounded-lg shadow-md w-full max-w-md">
+            </div>
+
+            <!-- Информация -->
+            <div>
+                <p class="text-xl font-bold text-gray-700">{% trans "Состояние" %}:</p>
+                <div class="flex text-yellow-400 text-2xl">
+                    {% for i in "0123456789"|slice:bench.get_rating %}
+                        ⭐
+                    {% endfor %}
+                </div>
+
+                <div class="mt-4">
+                    <p class="text-xl font-bold text-gray-700">{% trans "Координаты" %}:</p>
+                    <p class="text-gray-600">{% trans "Широта" %}: {{ bench.location_latitude|floatformat:6 }}</p>
+                    <p class="text-gray-600">{% trans "Долгота" %}: {{ bench.location_longitude|floatformat:6 }}</p>
+                </div>
+
+                <div class="mt-4">
+                    <p class="text-xl font-bold text-gray-700">{% trans "Дополнительная информация" %}:</p>
+                    <p>
+                        {% trans "Спинка" %}: 
+                        {% if bench.has_backrest %}✅{% else %}❌{% endif %}
+                    </p>
+                    <p>
+                        {% trans "Урна" %}: 
+                        {% if bench.has_bin %}✅{% else %}❌{% endif %}
+                    </p>
+                    <p>{% trans "Дата создания" %}: {{ bench.created_date }}</p>
+                    <p>{% trans "Автор" %}: {{ bench.author.username }}</p>
+                    <p>{% trans "Тип" %}: {{ bench.type.name }}</p>
+                    <p>{% trans "Район" %}: {{ bench.district.name }}</p>
+                    <p>{% trans "Окружение" %}: {{ bench.environment.name }}</p>
+                </div>
+            </div>
         </div>
 
-        <p class="text-lg font-bold mt-4">{% trans 'Координаты' %}:</p>
-        <p>{% trans 'Широта' %}: {{ bench.location_latitude|floatformat:6 }}</p>
-        <p>{% trans 'Долгота' %}: {{ bench.location_longitude|floatformat:6 }}</p>
-        <br>
+        <!-- Кнопки действий -->
+        <div class="mt-6 flex flex-col md:flex-row items-center justify-center space-y-3 md:space-y-0 md:space-x-6">
+            <a href="{% url 'mySite:index' %}?lat={{ bench.location_latitude|floatformat:6 }}&lon={{ bench.location_longitude|floatformat:6 }}"
+               class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
+                {% trans "Показать на карте" %}
+            </a>
 
-        <p class="text-lg font-bold mt-4">{% trans 'Дополнительная информация' %}:</p>
-        <p>
-            Спинка:&nbsp;&nbsp;
-            {% if bench.has_backrest %}
-                ✅
-            {% elif bench.has_backrest %}
-                ❌
-            {% else %}
-                ❔
-            {% endif %}
-        </p> 
-        <p>
-            Урна:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            {% if bench.has_bin %}
-                ✅
-            {% elif bench.has_bin %}
-                ❌
-            {% else %}
-                ❔
-            {% endif %}
-        </p>
-        <p>{% trans 'Дата создания' %}: {{ bench.created_date }}</p>
-        <p>{% trans 'Автор' %}: {{ bench.author.username }}</p>
-        <p>{% trans 'Тип' %}: {{ bench.type.name }}</p>
-        <p>{% trans 'Район' %}: {{ bench.district.name }}</p>
-        <p>{% trans 'Окружение' %}: {{ bench.environment.name }}</p>
-      </div>
-      <div class="flex flex-col">
-        <br>
-        <a class="text-lg underline underline-offset-4" href="/" id="showOnMap">{% trans 'Показать на карте' %}</a>
+            <a href="https://yandex.kz/maps/ru/162/almaty/?ll={{ bench.location_longitude|floatformat:6 }}%2C{{ bench.location_latitude|floatformat:6 }}
+            &mode=routes&rtext=~{{ bench.location_latitude|floatformat:6 }}%2C{{ bench.location_longitude|floatformat:6 }}&rtt=pd&ruri=~&z=18.08"
+               class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
+                {% trans "Открыть в Яндекс.Картах" %}
+            </a>
 
+            <button id="copyLinkBtn" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
+                {% trans "Поделиться" %}
+            </button>
+        </div>
+
+        <!-- Скрипт для кнопки "Поделиться" -->
         <script>
-          document.getElementById('showOnMap').addEventListener('click', function() {
-              // Сохраняем какие-либо данные, которые нужны на другой странице
-              localStorage.setItem('isShow', 1);
-              localStorage.setItem('benchLat', '{{ bench.location_latitude }}');
-              localStorage.setItem('benchLon', '{{ bench.location_longitude }}');
-          });
-      </script>
+            document.getElementById("copyLinkBtn").addEventListener("click", function () {
+                var link = window.location.href;
+                navigator.clipboard.writeText(link).then(function () {
+                    alert("{% trans 'Ссылка скопирована!' %}");
+                }).catch(function (error) {
+                    console.error("Ошибка копирования: ", error);
+                });
+            });
+        </script>
 
-        <br>
-        <a class="text-lg underline underline-offset-4" href="https://yandex.kz/maps/ru/162/almaty/?ll={{ bench.location_longitude|floatformat:6 }}%2C{{ bench.location_latitude|floatformat:6 }}
-        &mode=routes&rtext=~{{ bench.location_latitude|floatformat:6 }}%2C{{ bench.location_longitude|floatformat:6 }}&rtt=pd&ruri=~&z=18.08">{% trans 'Открыть в Яндекс Карта' %}х</a>
-        <br>
-        <a class="text-lg underline underline-offset-4" href="">{% trans 'Редактировать' %}</a>
-        <br>
-        <a class="text-lg underline underline-offset-4" href="">{% trans 'Поделиться' %}</a>
-        
-      </div>
-      
-      <div class="col-span-3">
-        
-        <p class="text-lg font-bold">{% trans 'Координаты' %}Описание:</p>
-        <p>{{ bench.description }}</p>
-      </div>
+        <!-- Описание -->
+        <div class="mt-8">
+            <p class="text-xl font-bold text-gray-700">{% trans "Описание" %}:</p>
+            <p class="text-gray-600">{{ bench.description }}</p>
+        </div>
     </div>
-  </div>
+</body>
 {% endblock %}

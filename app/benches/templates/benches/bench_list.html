@@ -1,146 +1,111 @@
 {% extends "mySite/base.html" %}
-
 {% load static tailwind_tags i18n %}
 
-{% block title %}Список скамеек{% endblock %}
+{% block title %}{% trans "Список скамеек" %}{% endblock %}
 
 {% block content %}
-  <div class="py-4">
-    <hr>
-    <br>
-    <div class="container mx-auto flex justify-between items-center">
-      <h2 class="text-2xl">Список скамеек</h2>
-      
+<body class="bg-green-50 min-h-screen p-6">
+    <div class="container mx-auto">
+        <!-- Заголовок -->
+        <div class="bg-white shadow-lg rounded-lg p-6 mb-6 text-center">
+            <h1 class="text-3xl font-bold text-green-700">{% trans "Список скамеек" %}</h1>
+            <p class="text-gray-600">{% trans "Найдено скамеек" %}: <strong>{{ benches.count }}</strong> / {{ benchesAll }}</p>
+        </div>
 
+        <!-- Фильтр -->
+        <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
+            <form method="get" action="{% url 'benches:bench_list' %}" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label for="district" class="block text-green-800 font-semibold">{% trans "Район" %}:</label>
+                    <select name="district" id="district" class="w-full border rounded-lg p-2 focus:ring-green-500">
+                        <option value="">{% trans "Все районы" %}</option>
+                        {% for district in districts %}
+                            <option value="{{ district.slug }}">{{ district.name }} ({{ district.districtBenchesCount }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label for="type" class="block text-green-800 font-semibold">{% trans "Тип" %}:</label>
+                    <select name="type" id="type" class="w-full border rounded-lg p-2 focus:ring-green-500">
+                        <option value="">{% trans "Все типы" %}</option>
+                        {% for bench_type in bench_types %}
+                            <option value="{{ bench_type.slug }}">{{ bench_type.name }} ({{ bench_type.bench_typesCount }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <label for="has_bin" class="flex items-center space-x-2">
+                        <input type="checkbox" name="has_bin" id="has_bin" {% if request.GET.has_bin %}checked{% endif %} class="h-5 w-5 text-green-600">
+                        <span>{% trans "С урной" %} ({{ hasBinNow }}/{{ hasBinAll }})</span>
+                    </label>
+
+                    <label for="has_backrest" class="flex items-center space-x-2">
+                        <input type="checkbox" name="has_backrest" id="has_backrest" {% if request.GET.has_backrest %}checked{% endif %} class="h-5 w-5 text-green-600">
+                        <span>{% trans "Со спинкой" %} ({{ hasBackrestNow }}/{{ hasBackrestAll }})</span>
+                    </label>
+                </div>
+
+                <div class="col-span-1 md:col-span-3 flex justify-between items-center">
+                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-300">
+                        {% trans "Показать" %}
+                    </button>
+                    <a href="{% url 'benches:bench_list' %}">
+                        <img class="h-12" src="{% static 'img/reset.png' %}" alt="">
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Список скамеек -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for bench in benches %}
+                <div class="bg-white shadow-lg rounded-lg p-6 flex flex-col">
+                    <a href="{% url 'benches:bench_detail' bench.id %}" class="text-xl font-bold text-green-700">
+                        {% trans "Скамейка" %} {{ bench.id }}
+                    </a>
+
+                    <p class="text-gray-600">
+                        <span class="text-yellow-400">
+                            {% for i in "0123456789"|slice:bench.get_rating %}
+                                ⭐
+                            {% endfor %}
+                        </span>
+                    </p>
+
+                    <p class="text-sm text-gray-600 mt-2">
+                        <a class="underline text-blue-500" href="{% url 'mySite:index' %}?lat={{ bench.location_latitude|floatformat:6 }}&lon={{ bench.location_longitude|floatformat:6 }}">
+                          {% trans "Показать на карте" %}
+                        </a>
+                        {{ bench.district.name }}, {{ bench.environment.name }}
+                        
+                        {% if bench.has_backrest %}
+                            , {% trans "со спинкой" %}
+                        {% else %}
+                            , {% trans "без спинки" %}
+                        {% endif %}
+                        
+                        {% if bench.has_bin %}
+                            , {% trans "с урной" %}
+                        {% else %}
+                            , {% trans "без урны" %}
+                        {% endif %}
+                        
+                        , {{ bench.type.name }}
+                    </p>
+
+                    <p class="text-sm text-gray-500 mt-2">
+                        {% trans "Добавил" %}
+                        <a class="underline text-blue-500" target="_blank" href="{% url 'other_user_profile' bench.author.username %}">
+                            {{ bench.author.username }}
+                        </a> {% trans "в" %} {{ bench.created_date|date:"G:i, j E Y" }}
+                    </p>
+
+                    <img class="h-36 rounded-lg mt-4" src="{{ bench.get_avatar_url }}" alt="">
+                </div>
+            {% endfor %}
+        </div>
     </div>
-    <br>
-    <hr>
-  </div>
-  
-  <div class="container mx-auto mt-8">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col">
-        <h3 class="text-xl">Найдено скамеек: {{ benches.count }}, Всего {{ benchesAll }}</h3>
-      
-        <br>
-        <form method="get" action="{% url 'benches:bench_list' %}" class="flex-grow flex flex-col">
-            <label for="district">Район:</label>
-            <select name="district" id="district">
-              <option value="" selected>Все районы</option>
-              <!-- Добавьте опции динамически на основе ваших районов -->
-              {% for district in districts %}
-                  <option value="{{ district.slug }}">{{ district.name }} (Всего {{ district.districtBenchesCount }})</option>
-              {% endfor %}
-          </select>
-          
-          <br>
-          
-          <label for="type">Тип</label>
-          <select name="type" id="type">
-              <option value="" selected>Все типы</option>
-              <!-- Добавьте опции динамически на основе ваших типов -->
-              {% for bench_type in bench_types %}
-                  <option value="{{ bench_type.slug }}">{{ bench_type.name }} (Всего {{ bench_type.bench_typesCount }})</option>
-              {% endfor %}
-          </select>
-          
-            <br>
-            <label for="has_bin">С урной (Найдено {{ hasBinNow }}, Всего {{ hasBinAll }})</label>
-            <input type="checkbox" name="has_bin" id="has_bin" {% if request.GET.has_bin %}checked{% endif %} value="checked">
-        
-            <label for="has_backrest">Со спинкой (Найдено {{ hasBackrestNow }}, Всего {{ hasBackrestAll }})</label>
-            <input type="checkbox" name="has_backrest" id="has_backrest" {% if request.GET.has_backrest %}checked{% endif %}>
-            <br>
-            <div class="flex-grow"></div> <!-- Этот элемент будет занимать все доступное пространство, поднимая кнопку вниз -->
-            <div class="flex flex-row items-center">
-              <button class="border-2 rounded-lg p-2 bg-blue-500 hover:bg-blue-300 transition duration-300 ease-in-out flex-grow">
-                Показать
-              </button>
-
-              <a class="" href="{% url 'benches:bench_list' %}">
-                <img class="h-12" src="{% static 'img/reset.png' %}" alt="">
-              </a>
-
-            </div>
-
-            
-        </form>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
-              $(document).ready(function () {
-                  // Восстанавливаем значения из локального хранилища
-                  var selectedDistrict = localStorage.getItem('selectedDistrict');
-                  var selectedType = localStorage.getItem('selectedType');
-          
-                  // Устанавливаем значения для select
-                  $('#district').val(selectedDistrict);
-                  $('#type').val(selectedType);
-          
-                  // Обработчик события для сохранения выбора пользователя
-                  $('select').on('change', function () {
-                      var selectedDistrict = $('#district').val();
-                      var selectedType = $('#type').val();
-          
-                      localStorage.setItem('selectedDistrict', selectedDistrict);
-                      localStorage.setItem('selectedType', selectedType);
-                  });
-              });
-        </script>
-        
-        
-    </div>
-    
-    
-      
-      {% for bench in benches %}
-      <div class="bg-white p-6 rounded-lg shadow-md">
-
-        <a href="{% url 'benches:bench_detail' bench.id %}" class="text-xl">Скамейка {{ bench.id }}</a>
-        <p>Rating: {{ bench.rating }}</p>
-        <p>
-          {% for i in "0123456789"|slice:bench.get_rating %}
-            ⭐
-          {% endfor %}
-        </p>
-  
-        <p class="lowercase">
-          <a class="underline" href="/" id="showOnMap">{% trans 'Показать на карте' %}</a>,
-          
-          <script>
-            document.getElementById('showOnMap').addEventListener('click', function() {
-                // Сохраняем какие-либо данные, которые нужны на другой странице
-                localStorage.setItem('isShow', 1);
-                localStorage.setItem('benchLat', '{{ bench.location_latitude }}');
-                localStorage.setItem('benchLon', '{{ bench.location_longitude }}');
-            });
-        </script>
-          
-          {{ bench.district.name }},
-          {{ bench.environment.name }}
-  
-          {% if bench.has_backrest %}
-            , {% trans 'со спинкой' %}
-          {% elif bench.has_backrest %}
-            , {% trans 'без спинки' %}
-          {% endif %}
-  
-          {% if bench.has_bin %}
-            , {% trans 'с урной' %}
-          {% elif bench.has_bin %}
-            , {% trans 'без урны' %}
-          {% endif %}
-  
-          , {{ bench.type.name }}
-  
-        </p>
-  
-        <p>Добавил <a class="underline" target="_blank" href="{% url 'other_user_profile' bench.author.username %}">{{ bench.author.username }}</a> {% trans 'в' %} {{ bench.created_date|date:"G:i, j E Y"  }}</p>
-
-        <img class="h-36" src="{{ bench.get_avatar_url }}" alt="">
-      </div>
-    {% endfor %}
-    </div>
-  </div>
-
-
+</body>
 {% endblock %}

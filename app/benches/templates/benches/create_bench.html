@@ -14,8 +14,8 @@
 
   <div id="map" style="width: 99vw;; height:43.5vh"></div>
 </div>
-
-<div class="container mx-auto my-10">
+<body class="bg-green-50 flex flex-col items-center min-h-screen p-4">
+  <div class="w-full max-w-4xl bg-white shadow-lg rounded-xl p-8 mx-auto">
     <h1 class="text-3xl font-bold mb-6">{% trans 'Создать скамейку' %}</h1>
 
     <script type="text/javascript">
@@ -117,69 +117,115 @@
       });
     </script>
 
-    <form method="post" enctype="multipart/form-data" class="mx-auto">
-        {% csrf_token %}
+        <!-- Форма -->
+        <form method="post" enctype="multipart/form-data" class="space-y-6">
+          {% csrf_token %}
 
-        <div class="mb-4 flex flex-row">
-            <div class="mr-3">
-              <label for="id_location_latitude" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Широта' %}</label>
-              <input type="number" name="location_latitude" step="any" required="" id="id_location_latitude" readonly>
-            </div>
+          <!-- Блок координат -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                  <label class="block text-green-800 font-semibold">{% trans "Широта" %}:</label>
+                  <input type="number" name="location_latitude" id="id_location_latitude" step="any" required readonly 
+                         class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500">
+              </div>
+              <div>
+                  <label class="block text-green-800 font-semibold">{% trans "Долгота" %}:</label>
+                  <input type="number" name="location_longitude" id="id_location_longitude" step="any" required readonly
+                         class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500">
+              </div>
+          </div>
+
+          <!-- Блок фото -->
+          <div class="flex flex-col space-y-2">
+              <label class="block text-green-800 font-semibold">{% trans "Главное фото" %}:</label>
+              {{ bench_form.avatar }}
+          </div>
+
+          <!-- Основные свойства -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label for="id_location_longitude" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Долгота' %}</label>
-              <input type="number" name="location_longitude" step="any" required="" id="id_location_longitude" readonly>
-            </div>
-        </div>
+              <label class="block text-green-800 font-semibold">{% trans "Состояние" %}:</label>
+              <div id="star-rating" class="flex space-x-1 text-2xl text-gray-300 cursor-pointer">
+                  <span class="star" data-value="1">★</span>
+                  <span class="star" data-value="2">★</span>
+                  <span class="star" data-value="3">★</span>
+                  <span class="star" data-value="4">★</span>
+                  <span class="star" data-value="5">★</span>
+              </div>
+              <input type="hidden" name="rating" id="rating-input" value="0">
+          </div>
+          
+          <script>
+              document.addEventListener("DOMContentLoaded", function () {
+                  const stars = document.querySelectorAll("#star-rating .star");
+                  const ratingInput = document.querySelector("#rating-input");
+          
+                  stars.forEach(star => {
+                      star.addEventListener("click", function () {
+                          const rating = this.getAttribute("data-value");
+                          ratingInput.value = rating;
+          
+                          // Обновляем визуальное отображение
+                          stars.forEach(s => s.classList.remove("text-yellow-400"));
+                          this.classList.add("text-yellow-400");
+          
+                          // Закрашиваем все предыдущие звезды
+                          let prev = this.previousElementSibling;
+                          while (prev) {
+                              prev.classList.add("text-yellow-400");
+                              prev = prev.previousElementSibling;
+                          }
+                      });
+                  });
+              });
+          </script>
+          
+              <div>
+                  <label class="block text-green-800 font-semibold">{% trans "Тип" %}:</label>
+                  {{ bench_form.type }}
+              </div>
+          </div>
 
-        <div class="mb-4">
-            <label for="id_avatar" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Главное фото' %}</label>
-            {{ bench_form.avatar }}
-        </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                  <label class="block text-green-800 font-semibold">{% trans "Есть спинка?" %}:</label>
+                  {{ bench_form.has_backrest }}
+              </div>
+              <div>
+                  <label class="block text-green-800 font-semibold">{% trans "Есть мусорка?" %}:</label>
+                  {{ bench_form.has_bin }}
+              </div>
+          </div>
 
-        <div class="mb-4">
-            <label for="id_rating" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Состояние' %}</label>
-            {{ bench_form.rating }}
-        </div>
+          <!-- Блок окружения -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                  <label class="block text-green-800 font-semibold">{% trans "Район" %}:</label>
+                  {{ bench_form.district }}
+              </div>
+              <div>
+                  <label class="block text-green-800 font-semibold">{% trans "Окружение" %}:</label>
+                  {{ bench_form.environment }}
+              </div>
+          </div>
 
-        <div class="mb-4">
-            <label for="id_has_backrest" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Есть спинка?' %}</label>
-            {{ bench_form.has_backrest }}
-        </div>
+          <!-- Описание -->
+          <div>
+              <label class="block text-green-800 font-semibold">{% trans "Описание" %}:</label>
+              {{ bench_form.description }}
+          </div>
 
-        <div class="mb-4">
-            <label for="id_has_bin" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Есть мусорка?' %}</label>
-            {{ bench_form.has_bin }}
-        </div>
+          <!-- Дополнительные фото -->
+          <div class="flex flex-col space-y-2">
+              <label class="block text-green-800 font-semibold">{% trans "Дополнительные фото" %}:</label>
+              {{ image_form.image }}
+          </div>
 
-        <div class="mb-4">
-            <label for="id_description" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Описание' %}</label>
-            {{ bench_form.description }}
-        </div>
-
-        <div class="mb-4">
-            <label for="id_type" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Тип' %}</label>
-            {{ bench_form.type }}
-        </div>
-
-        <div class="mb-4">
-            <label for="id_district" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Район' %}</label>
-            {{ bench_form.district }}
-        </div>
-
-        <div class="mb-4">
-            <label for="id_environment" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Окружение' %}</label>
-            {{ bench_form.environment }}
-        </div>
-
-        <div class="mb-4">
-            <label for="id_image" class="block text-gray-700 text-sm font-bold mb-2">{% trans 'Фото' %}</label>
-            {{ image_form.image }}
-        </div>
-
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-          {% trans 'Добавить скамейку' %}
-        </button>
-    </form>
+          <!-- Кнопка -->
+          <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
+              {% trans "Добавить скамейку" %}
+          </button>
+      </form>
 
     <script>
       const latitude_input = document.querySelector('#id_location_latitude');
@@ -187,4 +233,6 @@
     </script>
 
 </div>
+</body>
+
 {% endblock %}

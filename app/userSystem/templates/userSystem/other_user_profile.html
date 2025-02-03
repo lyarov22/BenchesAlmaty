@@ -1,24 +1,33 @@
 {% extends "mySite/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Профиль пользователя" %}{% endblock %}
+
 {% block content %}
-{% if profile %}
-    <h2>Профиль пользователя</h2>
-    <p>Имя пользователя: {{ profile.user.username }}</p>
-    <p>Почта: {{ profile.user.email }}</p>
+<body class="bg-green-50 flex items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-lg bg-white shadow-lg rounded-xl p-8 mx-auto">
+        {% if profile %}
+            <h1 class="text-3xl font-bold text-green-700 text-center mb-6">{% trans "Профиль пользователя" %}</h1>
 
-    <p>Уровень: {{ profile.get_level_display }}</p>
+            <div class="text-center">
+                <img class="w-24 h-24 rounded-full mx-auto shadow-md mb-4" src="{{ profile.get_avatar_url }}" alt="{% trans 'Аватар пользователя' %}">
+            </div>
 
-    <p>Имя: {{ profile.name }}</p>
-    <p>Фамилия: {{ profile.surname }}</p>
-    <p>Биография: {{ profile.bio }}</p>
-
-    <p>Аватар:</strong></p>
-    <img src="{{ profile.get_avatar_url }}" alt="Аватар пользователя">
-
-    <p>Дата регистрации: {{ profile.user.date_joined }}</p>
-    <p>Последний вход: {{ profile.user.last_login }}</p>
-
-{% else %}
-    <p>{{ error_message }}</p>
-{% endif %}
-
+            <div class="grid gap-4 text-gray-700">
+                <p><strong>{% trans "Имя пользователя" %}:</strong> {{ profile.user.username }}</p>
+                <p><strong>{% trans "Почта" %}:</strong> {{ profile.user.email }}</p>
+                <p><strong>{% trans "Уровень" %}:</strong> {{ profile.get_level_display }}</p>
+                <hr>
+                <p><strong>{% trans "Имя" %}:</strong> {{ profile.name }}</p>
+                <p><strong>{% trans "Фамилия" %}:</strong> {{ profile.surname }}</p>
+                <p><strong>{% trans "Биография" %}:</strong> {{ profile.bio }}</p>
+                <hr>
+                <p><strong>{% trans "Дата регистрации" %}:</strong> {{ profile.user.date_joined }}</p>
+                <p><strong>{% trans "Последний вход" %}:</strong> {{ profile.user.last_login }}</p>
+            </div>
+        {% else %}
+            <p class="text-red-600 text-center">{% trans error_message %}</p>
+        {% endif %}
+    </div>
+</body>
 {% endblock %}

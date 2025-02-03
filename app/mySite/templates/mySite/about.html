@@ -1,0 +1,206 @@
+{% extends "mySite/base.html" %}
+{% load static tailwind_tags i18n %}
+
+{% block title %}{% trans "О проекте" %}{% endblock %}
+
+{% block content %}
+<body class="bg-green-50 leading-normal tracking-normal">
+    <section class="relative w-full bg-gradient-to-r from-green-500 to-yellow-400 py-20 px-6 text-white">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">{% trans "Карта скамеек Алматы" %}</h1>
+            <p class="text-lg md:text-xl max-w-2xl mx-auto">
+                {% trans "Наш проект помогает жителям и гостям Алматы находить удобные места для отдыха. Мы собираем данные о расположении скамеек, условиях окружающей среды и удобствах поблизости." %}
+            </p>
+        </div>
+    </section>
+
+    <section class="container mx-auto my-10 px-6">
+        <h2 class="text-3xl font-semibold text-center mb-6 text-green-800">{% trans "Почему это важно?" %}</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+                <img src="https://img.icons8.com/ios-filled/100/4caf50/city.png" alt="Community" class="mx-auto h-16 mb-4">
+                <h3 class="text-xl font-semibold mb-2">{% trans "Городская среда" %}</h3>
+                <p class="text-gray-600">{% trans "Мы помогаем делать город удобнее, показывая места для отдыха и общения." %}</p>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+                <img src="https://img.icons8.com/?size=100&id=955&format=png&color=4caf50" alt="Health" class="mx-auto h-16 mb-4">
+                <h3 class="text-xl font-semibold mb-2">{% trans "Здоровье и комфорт" %}</h3>
+                <p class="text-gray-600">{% trans "Скамейки важны для пожилых людей, родителей с детьми и всех, кто хочет передохнуть." %}</p>
+            </div>
+            <div class="bg-white shadow-lg rounded-lg p-6 text-center">
+                <img src="https://img.icons8.com/?size=100&id=826&format=png&color=4caf50" alt="Nature" class="mx-auto h-16 mb-4">
+                <h3 class="text-xl font-semibold mb-2">{% trans "Экология и отдых" %}</h3>
+                <p class="text-gray-600">{% trans "Скамейки часто находятся в парках, создавая точки для наслаждения природой." %}</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="container mx-auto px-6 my-10">
+        <div class="flex justify-center">
+            <div id="map" class="w-full max-w-screen-lg h-96 rounded-lg shadow-lg"></div>
+        </div>
+
+        <script src="https://maps.api.2gis.ru/2.0/loader.js?pkg=full&skin=dark"></script>
+        <script type="text/javascript">
+		
+            var map;
+        
+            DG.then(function() {
+                        // загрузка кода модуля
+                        return DG.plugin('https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js');
+                    }).then(function() {
+                
+                map = DG.map('map', {
+                    center: [43.241025, 76.957485],
+                    zoom: 15
+                });
+    
+                    console.log('Страница загружена!');
+    
+                        if (localStorage.getItem('isShow') == 1){
+                            localStorage.setItem('isShow', 0);
+                            var show_location_latitude = localStorage.getItem('benchLat');
+                            var show_location_longitude = localStorage.getItem('benchLon');
+                            
+                            console.log(show_location_latitude.replace(',', '.'));
+                            console.log(show_location_longitude);
+    
+                            map.setView([show_location_latitude.replace(',', '.'), show_location_longitude.replace(',', '.')]);
+                            
+                        }
+                        
+                DG.control.location({position: 'bottomright'}).addTo(map);
+                // DG.control.scale().addTo(map);
+                // DG.control.ruler({position: 'bottomleft'}).addTo(map);
+                // DG.control.traffic().addTo(map);
+        
+                your_locationIcon = DG.icon({
+                            iconUrl: '{% static "img/your_location.png" %}',
+                            iconSize: [24, 24]
+                });
+        
+                catec_collegeIcon = DG.icon({
+                            iconUrl: '{% static "img/catecCollege.png" %}',
+                            iconSize: [48, 24]
+                });
+    
+                benchIcon = DG.icon({
+                    iconUrl: '{% static "img/bench.png" %}',
+                    iconSize: [24, 24]
+                });
+    
+                var markers = DG.markerClusterGroup();
+    
+                {% for bench in benches %}
+                    var popup = `
+                    <div id="bench-{{ bench.id }}" class="w-28 h-60">
+                        <a href="" class="flex items-center underline">
+                            <p class="text-sm text-white">Скамейка &nbsp;<p class="text-lg text-white">{{ bench.id }}</p></p>
+                        </a>
+                        <p>
+                            Спинка:&nbsp;&nbsp;
+                            {% if bench.has_backrest %}
+                                ✅
+                            {% elif bench.has_backrest %}
+                                ❌
+                            {% else %}
+                                ❔
+                            {% endif %}
+                        </p> 
+                        <p>
+                            Урна:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            {% if bench.has_bin %}
+                                ✅
+                            {% elif bench.has_bin %}
+                                ❌
+                            {% else %}
+                                ❔
+                            {% endif %}
+                        </p> 
+    
+                        <br/>
+                        <p>{{ bench.type.name }}</p>
+                        <p>{{ bench.district.name }}</p>
+                        <p>{{ bench.environment.name }}</p>
+    
+                        <p>
+                            {% if bench.rating == 0 %}
+                            Нет оценок
+                            <br/>
+                            {% else %}
+                                {% for i in "0123456789"|slice:bench.get_rating %}
+                                    ⭐
+                                {% endfor %}</p>
+                            {% endif %}
+                            <br/>
+    
+                        <a href="">
+                            <img class="w-28 h-16" src="{{ bench.get_avatar_url }}" alt="Фото скамейки">
+                        </a>
+                        
+                        <br/>
+                    </div>`;
+    
+                    var marker = DG.marker(['{{ bench.location_latitude }}'.replace(',', '.'), '{{ bench.location_longitude }}'.replace(',', '.')], {
+                        icon: benchIcon
+                    })
+                    .addTo(map)
+                    .bindPopup(popup);
+    
+                    markers.addLayer(marker);
+    
+                {% endfor %}
+    
+                DG.marker([43.241025, 76.957485], {
+                    icon: catec_collegeIcon
+                }).addTo(map).bindPopup('Центральноазиатский технико-экономический колледж');
+        
+                map.locate({ watch: true})
+                            .on('locationfound', function(e) {
+        
+        
+                                DG.marker([e.latitude, e.longitude], {
+                                    icon: your_locationIcon
+                                })
+                                .addTo(map)
+                                .bindLabel('Ваше местоположение!')
+                                .bindPopup(
+                                    '<p>Вы находитесь здесь.');
+                            })
+                            .on('locationerror', function(e) {
+                                DG.popup()
+                                  .setLatLng(map.getCenter())
+                                  .setContent('Доступ к определению местоположения отключён')
+                                  .openOn(map);
+                            });
+    
+                
+                
+                
+                
+    
+                map.addLayer(markers);
+    
+    
+            });
+        </script>
+    </section>
+
+    <section class="container mx-auto my-10 px-6 text-center">
+        <h2 class="text-3xl font-semibold text-green-800">{% trans "Присоединяйтесь к нам!" %}</h2>
+        <p class="text-gray-600 mt-4 max-w-xl mx-auto">
+            {% trans "Если вы хотите добавить информацию о новых скамейках или поддержать проект, напишите нам!" %}
+        </p>
+        
+        <div class="flex flex-col md:flex-row justify-center gap-4 mt-6">
+            <a href="{% url 'mySite:index' %}" class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
+                {% trans "Открыть полную версию" %}
+            </a>
+            <a href="/login" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
+                {% trans "Войти, чтобы добавлять скамейки" %}
+            </a>
+        </div>
+    </section>
+    
+</body>
+{% endblock content %}

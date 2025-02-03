@@ -15,3 +15,6 @@ def index(request):
         context = {'benches': benches}
 
     return render(request, "mySite/index.html", context)
+
+def about(request):
+    return render(request, "mySite/about.html")

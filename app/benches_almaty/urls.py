@@ -6,11 +6,11 @@ from django.conf.urls.static import static
 
 from userSystem import views as user_views
 
-allpatterns = [
+urlpatterns = [
     path('favicon.ico/', RedirectView.as_view(url='/static/img/reread-logo.ico', permanent=True), name='favicon'),
     path('admin/', admin.site.urls),
     path('rosetta/', include('rosetta.urls')),
-    path('', include('mySite.urls')),
+    path('', include('mySite.urls', namespace='mySite')),  # Добавлен namespace
     path('i18n/', include('django.conf.urls.i18n')),
 
     # login system
@@ -25,10 +25,6 @@ allpatterns = [
 
     # bench system
     path('benches/', include('benches.urls')),
-]
-
-urlpatterns = [
-    path('benches_site/', include((allpatterns, 'allpatterns'))),
 ]
 
 if settings.DEBUG:
